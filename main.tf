@@ -26,7 +26,7 @@ data "aws_iam_policy_document" "policy" {
       "ecr:PutImage",
     ]
     resources = [
-      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${var.team_name}/${var.repo_name}",
+      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.team_name}/*",
     ]
   }
 
