@@ -17,3 +17,8 @@ output "user_name" {
   description = "User name for the new credentials"
   value       = "${module.aws_ecr.user_name}"
 }
+
+output "repo_arn" {
+  description = "ECR repo ARN"
+  value       = "${module.aws_ecr.repo_arn}"
+}

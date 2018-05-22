@@ -24,3 +24,4 @@ Note that this example may create resources which can cost money. Run `terraform
 | access_key_id | Access key id for the new user |
 | secret | Secret for the new user |
 | user_name | User name for the new credentials |
+| repo_arn | ECR repository ARN |

@@ -24,7 +24,6 @@ module "aws_ecr" {
 | repo_name | name of the repository to be created | string | - | yes |
 | team_name | name of the team creating the credentials | string | - | yes |
 
-
 ## Outputs
 
 | Name | Description |
@@ -33,3 +32,4 @@ module "aws_ecr" {
 | access_key_id | Access key id for the new user |
 | secret | Secret for the new user |
 | user_name | User name for the new credentials |
+| repo_arn | ECR repository ARN |
