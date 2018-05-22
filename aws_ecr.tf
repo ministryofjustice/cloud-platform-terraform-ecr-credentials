@@ -1,10 +1,19 @@
-data "aws_iam_user" "user" {
-  user_name = "${var.user_name}"
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
+resource "aws_iam_user" "user" {
+  name = "${var.team_name}-ecr-system-account"
+  path = "/teams/${var.team_name}/"
+}
+
+resource "aws_iam_access_key" "key" {
+  user = "${aws_iam_user.user.name}"
 }
 
 resource "aws_iam_policy" "policy" {
-  name        = "${var.user_name}_ecr_policy"
-  description = "ecr policy for user ${var.user_name}"
+  name        = "${var.team_name}-ecr-read-write"
+  path        = "/teams/${var.team_name}/"
+  description = "ECR policy for team ${var.team_name}"
 
   policy = <<EOF
 {
@@ -25,7 +34,7 @@ resource "aws_iam_policy" "policy" {
                 "ecr:GetRepositoryPolicy",
                 "ecr:PutImage"
             ],
-            "Resource": "arn:aws:ecr:eu-west-1:${var.account_id}:repository/${var.repo_name}"
+            "Resource": "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${var.team_name}/${var.repo_name}"
         },
         {
             "Effect": "Allow",
@@ -38,6 +47,6 @@ EOF
 }
 
 resource "aws_iam_user_policy_attachment" "policy-attachment" {
-    user       = "${data.aws_iam_user.user.user_name}"
+    user       = "${aws_iam_user.user.name}"
     policy_arn = "${aws_iam_policy.policy.arn}"
 }
