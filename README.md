@@ -1,0 +1,1 @@
+# cloud-platform-terraform-ecr-credentials
