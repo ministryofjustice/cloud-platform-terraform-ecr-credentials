@@ -25,6 +25,7 @@ data "aws_iam_policy_document" "policy" {
       "ecr:GetRepositoryPolicy",
       "ecr:PutImage",
     ]
+
     resources = [
       "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.team_name}/*",
     ]
@@ -34,6 +35,7 @@ data "aws_iam_policy_document" "policy" {
     actions = [
       "ecr:GetAuthorizationToken",
     ]
+
     resources = [
       "*",
     ]
