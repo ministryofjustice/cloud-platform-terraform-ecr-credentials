@@ -20,5 +20,5 @@ output "user_name" {
 
 output "repo_arn" {
   description = "ECR repository ARN"
-  value       = "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${var.team_name}/${var.repo_name}"
+  value       = "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${var.team_name}/${var.repo_name}"
 }
