@@ -6,7 +6,7 @@ Terraform module which creates ECR credentials and repository on AWS.
 
 ```hcl
 module "best_team_ecr_credentials" {
-  source = "git@github.com:ministryofjustice/cloud-platform-terraform-ecr-credentials.git"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=master"
 
   repo_name = "test-repo"
   team_name = "best-team"
