@@ -1,8 +1,3 @@
-output "policy_arn" {
-  description = "ARN for the new policy"
-  value       = "${module.example_team_ecr_credentials.policy_arn}"
-}
-
 output "access_key_id" {
   description = "Access key id for the credentials"
   value       = "${module.example_team_ecr_credentials.access_key_id}"

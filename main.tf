@@ -42,14 +42,8 @@ data "aws_iam_policy_document" "policy" {
   }
 }
 
-resource "aws_iam_policy" "policy" {
-  name        = "${var.team_name}-ecr-read-write"
-  path        = "/teams/${var.team_name}/"
-  policy      = "${data.aws_iam_policy_document.policy.json}"
-  description = "ECR policy for team ${var.team_name}"
-}
-
-resource "aws_iam_user_policy_attachment" "policy-attachment" {
-  user       = "${aws_iam_user.user.name}"
-  policy_arn = "${aws_iam_policy.policy.arn}"
+resource "aws_iam_user_policy" "policy" {
+  name   = "ecr-read-write"
+  policy = "${data.aws_iam_policy_document.policy.json}"
+  user   = "${aws_iam_user.user.name}"
 }
