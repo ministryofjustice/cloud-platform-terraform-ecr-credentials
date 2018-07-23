@@ -1,9 +1,13 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+resource "random_id" "user" {
+  byte_length = 8
+}
+
 resource "aws_iam_user" "user" {
-  name = "${var.team_name}-ecr-system-account"
-  path = "/teams/${var.team_name}/"
+  name = "ecr-user-${random_id.user.hex}"
+  path = "/system/ecr-user/${var.team_name}/"
 }
 
 resource "aws_iam_access_key" "key" {

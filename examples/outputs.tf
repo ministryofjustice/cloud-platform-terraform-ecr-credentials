@@ -8,11 +8,6 @@ output "secret_access_key" {
   value       = "${module.example_team_ecr_credentials.secret_access_key}"
 }
 
-output "user_name" {
-  description = "User name for the new credentials"
-  value       = "${module.example_team_ecr_credentials.user_name}"
-}
-
 output "repo_arn" {
   description = "ECR repo ARN"
   value       = "${module.example_team_ecr_credentials.repo_arn}"
