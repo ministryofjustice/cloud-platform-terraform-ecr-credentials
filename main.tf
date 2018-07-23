@@ -1,6 +1,10 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+resource "aws_ecr_repository" "repo" {
+  name = "${var.team_name}/${var.repo_name}"
+}
+
 resource "random_id" "user" {
   byte_length = 8
 }
@@ -31,7 +35,7 @@ data "aws_iam_policy_document" "policy" {
     ]
 
     resources = [
-      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${var.team_name}/*",
+      "${aws_ecr_repository.repo.arn}",
     ]
   }
 

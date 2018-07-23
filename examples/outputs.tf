@@ -12,3 +12,8 @@ output "repo_arn" {
   description = "ECR repo ARN"
   value       = "${module.example_team_ecr_credentials.repo_arn}"
 }
+
+output "repo_url" {
+  description = "ECR repo URL"
+  value       = "${module.example_team_ecr_credentials.repo_url}"
+}
