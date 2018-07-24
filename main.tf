@@ -13,16 +13,9 @@ resource "aws_iam_access_key" "key" {
 data "aws_iam_policy_document" "policy" {
   statement {
     actions = [
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
       "ecr:CompleteLayerUpload",
-      "ecr:DescribeImages",
-      "ecr:DescribeRepositories",
       "ecr:UploadLayerPart",
-      "ecr:ListImages",
       "ecr:InitiateLayerUpload",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetRepositoryPolicy",
       "ecr:PutImage",
     ]
 
@@ -34,6 +27,13 @@ data "aws_iam_policy_document" "policy" {
   statement {
     actions = [
       "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetRepositoryPolicy",
+      "ecr:DescribeRepositories",
+      "ecr:ListImages",
+      "ecr:DescribeImages",
+      "ecr:BatchGetImage",
     ]
 
     resources = [
