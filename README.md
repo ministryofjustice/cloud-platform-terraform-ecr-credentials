@@ -13,9 +13,7 @@ module "best_team_ecr_credentials" {
 }
 ```
 
-## Examples
-
-* [Basic EC2 instance](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/tree/master/examples)
+[Example](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/tree/master/examples)
 
 ## Inputs
 
