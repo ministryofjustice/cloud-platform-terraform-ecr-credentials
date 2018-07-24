@@ -28,8 +28,7 @@ module "best_team_ecr_credentials" {
 
 | Name | Description |
 |------|-------------|
-| policy_arn | ARN for the new policy |
 | access_key_id | Access key id for the new user |
 | secret_access_key | Secret for the new user |
-| user_name | User name for the new credentials |
 | repo_arn | ECR repository ARN |
+| repo_url | ECR repository URL |
