@@ -1,9 +1,17 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+resource "aws_ecr_repository" "repo" {
+  name = "${var.team_name}/${var.repo_name}"
+}
+
+resource "random_id" "user" {
+  byte_length = 8
+}
+
 resource "aws_iam_user" "user" {
-  name = "${var.team_name}-ecr-system-account"
-  path = "/teams/${var.team_name}/"
+  name = "ecr-user-${random_id.user.hex}"
+  path = "/system/ecr-user/${var.team_name}/"
 }
 
 resource "aws_iam_access_key" "key" {
@@ -27,7 +35,7 @@ data "aws_iam_policy_document" "policy" {
     ]
 
     resources = [
-      "arn:aws:ecr:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:repository/${var.team_name}/*",
+      "${aws_ecr_repository.repo.arn}",
     ]
   }
 
@@ -42,14 +50,8 @@ data "aws_iam_policy_document" "policy" {
   }
 }
 
-resource "aws_iam_policy" "policy" {
-  name        = "${var.team_name}-ecr-read-write"
-  path        = "/teams/${var.team_name}/"
-  policy      = "${data.aws_iam_policy_document.policy.json}"
-  description = "ECR policy for team ${var.team_name}"
-}
-
-resource "aws_iam_user_policy_attachment" "policy-attachment" {
-  user       = "${aws_iam_user.user.name}"
-  policy_arn = "${aws_iam_policy.policy.arn}"
+resource "aws_iam_user_policy" "policy" {
+  name   = "ecr-read-write"
+  policy = "${data.aws_iam_policy_document.policy.json}"
+  user   = "${aws_iam_user.user.name}"
 }
