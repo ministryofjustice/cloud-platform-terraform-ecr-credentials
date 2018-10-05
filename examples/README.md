@@ -1,27 +1,13 @@
-# example ECR Credentials
+# Example AWS ECR Repo Credentials configuration
 
 Configuration in this directory creates example ECR repository and credentials.
 
-This example outputs user name and secrets for the new credentials.
+This example is designed to be used in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments/) repository.
+
+The output will be in a kubernetes `Secret`, which includes the values of `access_key_id`, `secret_access_key`, `repo_arn` and `repo_url`.
 
 ## Usage
 
-To run this example you need to execute:
+In your namespace's path in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments/) repository, create a directory called `resources` (if you have not created one already) and refer to the contents of [main.tf](main.tf) to define the module properties. Make sure to change placeholder values to what is appropriate and refer to the top-level README file in this repository for extra variables that you can use to further customise your resource.
 
-```bash
-$ terraform init
-$ terraform plan
-$ terraform apply
-```
-
-Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| policy_arn | ARN for the new policy |
-| access_key_id | Access key id for the new user |
-| secret_access_key | Secret for the new user |
-| user_name | User name for the new credentials |
-| repo_arn | ECR repository ARN |
+Commit your changes to a branch and raise a pull request. Once approved, you can merge and the changes will be applied. Shortly after, you should be able to access the `Secret` on kubernetes and acccess the resources. You might want to refer to the [documentation on Secrets](https://kubernetes.io/docs/concepts/configuration/secret/).

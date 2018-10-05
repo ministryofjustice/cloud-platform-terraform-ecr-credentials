@@ -1,19 +1,17 @@
 # AWS ECR Terraform module
 
-Terraform module which creates ECR credentials and repository on AWS.
+This terraform module will create an ECR repository and IAM credentials to access it.
 
 ## Usage
 
 ```hcl
 module "best_team_ecr_credentials" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=master"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials"
 
   repo_name = "test-repo"
   team_name = "best-team"
 }
 ```
-
-[Example](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/tree/master/examples)
 
 ## Inputs
 
