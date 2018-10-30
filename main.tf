@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "policy" {
 }
 
 resource "aws_iam_user_policy" "policy" {
-  name   = "ecr-read-write"
+  name   = "ecr-${var.team_name}"
   policy = "${data.aws_iam_policy_document.policy.json}"
   user   = "${aws_iam_user.user.name}"
 }

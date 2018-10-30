@@ -1,3 +1,3 @@
-variable "repo_name" {}
+variable "repo_name" { }
 
-variable "team_name" {}
+variable "team_name" { }
