@@ -15,7 +15,6 @@ resource "aws_iam_access_key" "key" {
 }
 
 data "aws_iam_policy_document" "policy" {
-
   statement {
     actions = [
       "ecr:GetAuthorizationToken",
@@ -26,6 +25,7 @@ data "aws_iam_policy_document" "policy" {
       "*",
     ]
   }
+
   statement {
     actions = [
       "ecr:CompleteLayerUpload",
