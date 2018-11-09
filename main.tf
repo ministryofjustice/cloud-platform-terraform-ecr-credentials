@@ -2,20 +2,12 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "null_resource" "repo_cheat" {
-  provisioner "local-exec" {
-    command = "aws ecr create-repository --repository-name ${var.team_name}/${var.repo_name} || echo "${var.team_name}/${var.repo_name} already created""
+  triggers {
+    repo = "${var.team_name}/${var.repo_name}"
   }
   provisioner "local-exec" {
-    when    = "destroy"
-    command = "aws ecr delete-repository --repository-name ${var.team_name}/${var.repo_name} || echo "${var.team_name}/${var.repo_name} already deleted""
+    command = "aws ecr create-repository --repository-name ${var.team_name}/${var.repo_name} || echo \"${var.team_name}/${var.repo_name} already created\""
   }
-}
-
-data "aws_ecr_repository" "repo" {
-  instance_tags {
-    repositoryName = "${var.team_name}/${var.repo_name}"
-  }    
-  depends_on = ["null_resource.repo_cheat"]
 }
 
 resource "aws_iam_user" "user" {

@@ -6,6 +6,8 @@ This example is designed to be used in the [cloud-platform-environments](https:/
 
 The output will be in a kubernetes `Secret`, which includes the values of `access_key_id`, `secret_access_key`, `repo_arn` and `repo_url`.
 
+**Caution:** On `destroy`, repos are not deleted just the team's shared IAM user - any place referencing those credentials will need them refreshed after a subsequent `apply`.
+
 ## Usage
 
 In your namespace's path in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments/) repository, create a directory called `resources` (if you have not created one already) and refer to the contents of [main.tf](main.tf) to define the module properties. Make sure to change placeholder values to what is appropriate and refer to the top-level README file in this repository for extra variables that you can use to further customise your resource.
