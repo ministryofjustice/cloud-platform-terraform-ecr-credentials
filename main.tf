@@ -5,6 +5,7 @@ resource "null_resource" "repo_cheat" {
   triggers {
     repo = "${var.team_name}/${var.repo_name}"
   }
+
   provisioner "local-exec" {
     command = "aws ecr create-repository --repository-name ${var.team_name}/${var.repo_name} || echo \"${var.team_name}/${var.repo_name} already created\""
   }
