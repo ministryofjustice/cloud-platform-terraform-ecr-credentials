@@ -1,5 +1,9 @@
 terraform {
-  backend "s3" {}
+  backend "s3" {
+    bucket = "test-raz"
+    region = "eu-west-1"
+    key    = "terraform.tfstate"
+  }
 }
 
 provider "aws" {
@@ -13,9 +17,9 @@ provider "aws" {
  *
  */
 module "example_team_ecr_credentials" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=2.0"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=github-teams"
 
-  repo_name = "example-repo"
+  repo_name = "example-repo-2"
   team_name = "example-team"
 }
 
