@@ -21,31 +21,40 @@ resource "aws_iam_access_key" "key" {
 data "aws_iam_policy_document" "policy" {
   statement {
     actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:DescribeRepositories",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+
+  statement {
+    actions = [
       "ecr:CompleteLayerUpload",
+      "ecr:BatchDeleteImage",
       "ecr:UploadLayerPart",
       "ecr:InitiateLayerUpload",
       "ecr:PutImage",
     ]
 
     resources = [
-      "${aws_ecr_repository.repo.arn}",
+      "arn:aws:ecr:*:*:repository/${var.team_name}/*",
     ]
   }
 
   statement {
     actions = [
-      "ecr:GetAuthorizationToken",
       "ecr:BatchCheckLayerAvailability",
       "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:DescribeRepositories",
       "ecr:ListImages",
       "ecr:DescribeImages",
       "ecr:BatchGetImage",
     ]
 
     resources = [
-      "*",
+      "arn:aws:ecr:*:*:repository/${var.team_name}/*",
     ]
   }
 }
