@@ -23,6 +23,11 @@ data "aws_iam_policy_document" "policy" {
     actions = [
       "ecr:GetAuthorizationToken",
       "ecr:DescribeRepositories",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:ListImages",
+      "ecr:DescribeImages",
+      "ecr:BatchGetImage",
     ]
 
     resources = [
@@ -41,20 +46,6 @@ data "aws_iam_policy_document" "policy" {
 
     resources = [
       "arn:aws:ecr:eu-west-1:926803513772:repository/${var.team_name}/*",
-    ]
-  }
-
-  statement {
-    actions = [
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:ListImages",
-      "ecr:DescribeImages",
-      "ecr:BatchGetImage",
-    ]
-
-    resources = [
-      "*",
     ]
   }
 }
