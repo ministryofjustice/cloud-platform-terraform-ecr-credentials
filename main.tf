@@ -21,24 +21,10 @@ resource "aws_iam_access_key" "key" {
 data "aws_iam_policy_document" "policy" {
   statement {
     actions = [
-      "ecr:CompleteLayerUpload",
-      "ecr:UploadLayerPart",
-      "ecr:InitiateLayerUpload",
-      "ecr:PutImage",
-    ]
-
-    resources = [
-      "${aws_ecr_repository.repo.arn}",
-    ]
-  }
-
-  statement {
-    actions = [
       "ecr:GetAuthorizationToken",
+      "ecr:DescribeRepositories",
       "ecr:BatchCheckLayerAvailability",
       "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:DescribeRepositories",
       "ecr:ListImages",
       "ecr:DescribeImages",
       "ecr:BatchGetImage",
@@ -46,6 +32,20 @@ data "aws_iam_policy_document" "policy" {
 
     resources = [
       "*",
+    ]
+  }
+
+  statement {
+    actions = [
+      "ecr:CompleteLayerUpload",
+      "ecr:BatchDeleteImage",
+      "ecr:UploadLayerPart",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+    ]
+
+    resources = [
+      "arn:aws:ecr:eu-west-1:926803513772:repository/${var.team_name}/*",
     ]
   }
 }
