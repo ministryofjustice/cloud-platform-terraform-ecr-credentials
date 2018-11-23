@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "policy" {
     ]
 
     resources = [
-      "arn:aws:ecr:eu-west-1:754256621582:repository/${var.team_name}/*",
+      "arn:aws:ecr:eu-west-1:926803513772:repository/${var.team_name}/*",
     ]
   }
 
