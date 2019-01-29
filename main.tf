@@ -5,6 +5,30 @@ resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
 }
 
+resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  repository = "${aws_ecr_repository.repo.name}"
+
+  policy = <<EOF
+{
+    "rules": [
+        {
+            "rulePriority": 1,
+            "description": "Expire images older than 14 days",
+            "selection": {
+                "tagStatus": "untagged",
+                "countType": "sinceImagePushed",
+                "countUnit": "days",
+                "countNumber": 14
+            },
+            "action": {
+                "type": "expire"
+            }
+        }
+    ]
+}
+EOF
+}
+
 resource "random_id" "user" {
   byte_length = 8
 }
