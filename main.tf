@@ -12,13 +12,12 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
 {
     "rules": [
         {
-            "rulePriority": 1,
-            "description": "Expire images older than 14 days",
+            "rulePriority": 2,
+            "description": "Expire images over count 900",
             "selection": {
-                "tagStatus": "untagged",
-                "countType": "sinceImagePushed",
-                "countUnit": "days",
-                "countNumber": 14
+                "tagStatus": "any",
+                "countType": "imageCountMoreThan",
+                "countNumber": 900
             },
             "action": {
                 "type": "expire"
