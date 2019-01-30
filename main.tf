@@ -6,6 +6,7 @@ resource "aws_ecr_repository" "repo" {
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  count = "${var.enable_policy ? 1 : 0}"
   repository = "${aws_ecr_repository.repo.name}"
 
   policy = <<EOF

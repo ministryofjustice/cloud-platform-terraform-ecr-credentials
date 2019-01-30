@@ -19,6 +19,7 @@ module "best_team_ecr_credentials" {
 |------|-------------|:----:|:-----:|:-----:|
 | repo_name | name of the repository to be created | string | - | yes |
 | team_name | name of the team creating the credentials | string | - | yes |
+| enable_policy | Sets a ECR lifecycle policy to delete every image after count 900 | string | true | yes |
 
 ## Outputs
 
