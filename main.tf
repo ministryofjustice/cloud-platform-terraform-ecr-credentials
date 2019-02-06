@@ -14,11 +14,11 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
     "rules": [
         {
             "rulePriority": 2,
-            "description": "Expire images over count 900",
+            "description": "Expire images over count 40",
             "selection": {
                 "tagStatus": "any",
                 "countType": "imageCountMoreThan",
-                "countNumber": 900
+                "countNumber": 40
             },
             "action": {
                 "type": "expire"
