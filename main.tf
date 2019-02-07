@@ -5,6 +5,30 @@ resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
 }
 
+resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  count      = "${var.enable_policy ? 1 : 0}"
+  repository = "${aws_ecr_repository.repo.name}"
+
+  policy = <<EOF
+{
+    "rules": [
+        {
+            "rulePriority": 2,
+            "description": "Expire images over count 40",
+            "selection": {
+                "tagStatus": "any",
+                "countType": "imageCountMoreThan",
+                "countNumber": 40
+            },
+            "action": {
+                "type": "expire"
+            }
+        }
+    ]
+}
+EOF
+}
+
 resource "random_id" "user" {
   byte_length = 8
 }
