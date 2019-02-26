@@ -13,7 +13,7 @@ provider "aws" {
  *
  */
 module "example_team_ecr_credentials" {
-  source    = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=2.0"
+  source    = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=2.1"
   repo_name = "example-repo"
   team_name = "example-team"
 }
