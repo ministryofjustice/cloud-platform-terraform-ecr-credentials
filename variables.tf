@@ -8,6 +8,6 @@ variable "enable_policy" {
 }
 
 variable "aws_region" {
-  description= "Region into which the resource will be created."
-  default = "eu-west-2"
+  description = "Region into which the resource will be created."
+  default     = "eu-west-2"
 }

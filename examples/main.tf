@@ -13,10 +13,10 @@ provider "aws" {
  *
  */
 module "example_team_ecr_credentials" {
-  source    = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=3.0"
+  source     = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=3.0"
   repo_name  = "example-module"
   team_name  = "example-team"
-  aws_region = "eu-west-2" # this overwrite the region from the provider defined above. 
+  aws_region = "eu-west-2"                                                                     # this overwrite the region from the provider defined above. 
 }
 
 resource "kubernetes_secret" "example_team_ecr_credentials" {
