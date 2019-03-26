@@ -10,8 +10,11 @@ module "best_team_ecr_credentials" {
 
   repo_name = "test-repo"
   team_name = "best-team"
+  aws_region= "eu-west-2" 
 }
 ```
+
+Note: From version 3.0 of this module, The AWS region  will default to eu-west-2 (London). If you want to deploy to eu-west-1(Ireland), edit the above accordingly. 
 
 ## Inputs
 
@@ -19,7 +22,9 @@ module "best_team_ecr_credentials" {
 |------|-------------|:----:|:-----:|:-----:|
 | repo_name | name of the repository to be created | string | - | yes |
 | team_name | name of the team creating the credentials | string | - | yes |
-| enable_policy | Sets a ECR lifecycle policy to delete every image after count 40 | string | true | yes |
+| enable_policy | Sets a ECR lifecycle policy to delete every image after count 40 | string | true | yes 
+| aws_region | region into which the resource will be created | string | eu-west-2 | no 
+|
 
 ## Outputs
 

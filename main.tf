@@ -1,11 +1,18 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+provider "aws" {
+  alias  = "destination"
+  region = "${var.aws_region}"
+}
+
 resource "aws_ecr_repository" "repo" {
-  name = "${var.team_name}/${var.repo_name}"
+  provider = "aws.destination"
+  name     = "${var.team_name}/${var.repo_name}"
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  provider   = "aws.destination"
   count      = "${var.enable_policy ? 1 : 0}"
   repository = "${aws_ecr_repository.repo.name}"
 
