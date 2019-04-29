@@ -4,6 +4,12 @@ This terraform module will create an ECR repository and IAM credentials to acces
 
 ## Usage
 
+**This module will create the resources in the region of the providers specified in the `providers` input.**
+
+**Be sure to create the relevant providers, see example/main.tf**
+
+**From module version 3.2, this replaces the use of the `aws_region`.**
+
 ```hcl
 module "best_team_ecr_credentials" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials"
@@ -24,7 +30,8 @@ Note: From version 3.0 of this module, The AWS region  will default to eu-west-2
 | team_name | name of the team creating the credentials | string | - | yes |
 | enable_policy | Sets a ECR lifecycle policy to delete every image after count 40 | string | true | yes 
 | aws_region | region into which the resource will be created | string | eu-west-2 | no 
-|
+| providers | provider creating resources | arrays of string | default provider | no
+
 
 ## Outputs
 
