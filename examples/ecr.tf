@@ -5,9 +5,10 @@
  *
  */
 module "example_team_ecr_credentials" {
-  source     = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=3.2"
-  repo_name  = "example-module"
-  team_name  = "example-team"
+  source    = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=3.2"
+  repo_name = "example-module"
+  team_name = "example-team"
+
   # aws_region = "eu-west-2"     # This input is deprecated from version 3.2 of this module
 
   providers = {
