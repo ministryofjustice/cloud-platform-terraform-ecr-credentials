@@ -7,7 +7,7 @@ variable "enable_policy" {
   default     = true
 }
 
-# variable "aws_region" {
-#   description = "Region into which the resource will be created."
-#   default     = "eu-west-2"
-# }
+variable "aws_region" {
+  description = "Region into which the resource will be created."
+  default     = "eu-west-2"
+}

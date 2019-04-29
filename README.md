@@ -16,7 +16,11 @@ module "best_team_ecr_credentials" {
 
   repo_name = "test-repo"
   team_name = "best-team"
-  aws_region= "eu-west-2" 
+
+  # This is a new input
+  providers = { 
+    aws = "aws.london"
+  }
 }
 ```
 
