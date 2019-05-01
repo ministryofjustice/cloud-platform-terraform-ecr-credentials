@@ -1,9 +1,9 @@
-# terraform {
-#   backend "s3" {}
-# }
+terraform {
+  backend "s3" {}
+}
 
 provider "aws" {
-  region = "eu-west-1"
+  region = "eu-west-2"
 }
 
 # To be use in case the resources need to be created in London
