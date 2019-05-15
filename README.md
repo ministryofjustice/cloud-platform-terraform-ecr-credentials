@@ -1,5 +1,7 @@
 # AWS ECR Terraform module
 
+![version](https://img.shields.io/badge/version-3.3-green.svg?cacheSeconds=2592000)
+
 This terraform module will create an ECR repository and IAM credentials to access it.
 
 ## Usage
