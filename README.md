@@ -1,5 +1,7 @@
 # AWS ECR Terraform module
 
+[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-ecr-credentials/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/releases)
+
 This terraform module will create an ECR repository and IAM credentials to access it.
 
 ## Usage
@@ -18,13 +20,13 @@ module "best_team_ecr_credentials" {
   team_name = "best-team"
 
   # This is a new input
-  providers = { 
+  providers = {
     aws = "aws.london"
   }
 }
 ```
 
-Note: From version 3.0 of this module, The AWS region  will default to eu-west-2 (London). If you want to deploy to eu-west-1(Ireland), edit the above accordingly. 
+Note: From version 3.0 of this module, The AWS region  will default to eu-west-2 (London). If you want to deploy to eu-west-1(Ireland), edit the above accordingly.
 
 ## Inputs
 
@@ -32,8 +34,8 @@ Note: From version 3.0 of this module, The AWS region  will default to eu-west-2
 |------|-------------|:----:|:-----:|:-----:|
 | repo_name | name of the repository to be created | string | - | yes |
 | team_name | name of the team creating the credentials | string | - | yes |
-| enable_policy | Sets a ECR lifecycle policy to delete every image after count 100 | string | true | yes 
-| aws_region | region into which the resource will be created | string | eu-west-2 | no 
+| enable_policy | Sets a ECR lifecycle policy to delete every image after count 100 | string | true | yes
+| aws_region | region into which the resource will be created | string | eu-west-2 | no
 | providers | provider creating resources | arrays of string | default provider | no
 
 
