@@ -1,6 +1,8 @@
 # AWS ECR Terraform module
 
-[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-ecr-credentials/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/releases)
+<a href="https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/releases">
+  <img src="https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-ecr-credentials/all.svg" alt="Releases" />
+</a>
 
 This terraform module will create an ECR repository and IAM credentials to access it.
 
