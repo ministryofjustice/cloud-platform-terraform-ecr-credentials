@@ -1,5 +1,8 @@
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
+data "aws_caller_identity" "current" {
+}
+
+data "aws_region" "current" {
+}
 
 resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
@@ -15,7 +18,7 @@ resource "aws_iam_user" "user" {
 }
 
 resource "aws_iam_access_key" "key" {
-  user = "${aws_iam_user.user.name}"
+  user = aws_iam_user.user.name
 }
 
 data "aws_iam_policy_document" "policy" {
@@ -52,6 +55,7 @@ data "aws_iam_policy_document" "policy" {
 
 resource "aws_iam_user_policy" "policy" {
   name   = "ecr-read-write"
-  policy = "${data.aws_iam_policy_document.policy.json}"
-  user   = "${aws_iam_user.user.name}"
+  policy = data.aws_iam_policy_document.policy.json
+  user   = aws_iam_user.user.name
 }
+
