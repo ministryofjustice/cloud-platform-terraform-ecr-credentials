@@ -23,7 +23,7 @@ module "best_team_ecr_credentials" {
 
   # This is a new input
   providers = {
-    aws = "aws.london"
+    aws = aws.london
   }
 }
 ```
