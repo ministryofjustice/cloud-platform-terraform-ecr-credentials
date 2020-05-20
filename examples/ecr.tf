@@ -8,7 +8,7 @@ module "example_team_ecr_credentials" {
   source    = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=4.0"
   repo_name = "example-module"
   team_name = "example-team"
-
+  # enable_scanning_on_push = "false" # By default scanning images upon push is set to true.
   # aws_region = "eu-west-2"     # This input is deprecated from version 3.2 of this module
 
   providers = {

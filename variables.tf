@@ -4,7 +4,7 @@ variable "repo_name" {
 variable "team_name" {
 }
 
-variable "enable_scanning" {
+variable "enable_scanning_on_push" {
   default = true
 }
 

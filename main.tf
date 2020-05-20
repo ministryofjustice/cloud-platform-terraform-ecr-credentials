@@ -8,7 +8,7 @@ resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
 
   image_scanning_configuration {
-    scan_on_push = var.enable_scanning
+    scan_on_push = var.enable_scanning_on_push
   }
 
 }
