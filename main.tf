@@ -6,6 +6,11 @@ data "aws_region" "current" {
 
 resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
+
+  image_scanning_configuration {
+    scan_on_push = var.enable_scanning
+  }
+
 }
 
 resource "random_id" "user" {
