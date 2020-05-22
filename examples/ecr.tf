@@ -9,8 +9,6 @@ module "example_team_ecr_credentials" {
   repo_name = "example-module"
   team_name = "example-team"
 
-  # aws_region = "eu-west-2"     # This input is deprecated from version 3.2 of this module
-
   providers = {
     aws = aws.london
   }
