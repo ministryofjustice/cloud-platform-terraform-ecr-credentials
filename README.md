@@ -21,7 +21,6 @@ module "best_team_ecr_credentials" {
   repo_name = "test-repo"
   team_name = "best-team"
 
-  # This is a new input
   providers = {
     aws = aws.london
   }
