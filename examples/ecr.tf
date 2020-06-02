@@ -32,8 +32,8 @@ resource "kubernetes_secret" "example_team_ecr_credentials" {
 
 ########SLACK NOTIFIATIONS OF ECR SCAN RESULTS########################
 
-#To send notifications to slack of the ECR scanned results, you may insert the following two modules, one creates the lambda function.
-# and the other creates the even bridge that forwards the result details to the lambda function
+#To send notifications to slack of the ECR scanned results, you may insert the following two module that creates the lambda function
+# and also creates the even bridge that forwards the result details to the lambda function
 
 # SLACK KUBERNETES SECRET 
 
@@ -47,7 +47,7 @@ resource "kubernetes_secret" "example_team_ecr_credentials" {
 
 # You can run the following kubernets example command to the create the secret: 
 
-# kubectl create secret generic <SECRET_NAME> --from-literal=token=<SLACK_TOKEN> --from-literal=repo=<ECR_REPO> -n <NAMESPACE>
+# kubectl create secret generic <SLACK_SECRET_NAME> --from-literal=token=<SLACK_TOKEN> --from-literal=repo=<ECR_REPO> -n <NAMESPACE>
 
 
 module "ecr_scan_lambda" {
@@ -57,7 +57,7 @@ module "ecr_scan_lambda" {
   handler                    = "lambda_ecr-scan-slack.lambda_handler"
   lambda_role_name           = "example-team-role-name"
   lambda_policy_name         = "example-team-policy-name"
-  slack_secret               = "<SLACK_SECRET>"
+  slack_secret               = "<SLACK_SECRET_NAME>"
   namespace                  = "<NAMESPACE>"
 
 }
