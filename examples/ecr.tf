@@ -19,7 +19,7 @@ module "example_team_ecr_credentials" {
 resource "kubernetes_secret" "example_team_ecr_credentials" {
   metadata {
     name      = "example-team-ecr-credentials-output"
-    namespace = "my-namespace"
+    namespace = "<NAMESPACE>"
   }
 
   data = {
@@ -49,12 +49,6 @@ resource "kubernetes_secret" "example_team_ecr_credentials" {
 
 # kubectl create secret generic <SECRET_NAME> --from-literal=token=<SLACK_TOKEN> --from-literal=repo=<ECR_REPO> -n <NAMESPACE>
 
-data "kubernetes_secret" "slack_cred" {
-  metadata {
-    name      = "my-slack-secret-name"
-    namespace = "my-space"
-  }
-}
 
 module "ecr_scan_lambda" {
 
@@ -63,7 +57,7 @@ module "ecr_scan_lambda" {
   handler                    = "lambda_ecr-scan-slack.lambda_handler"
   lambda_role_name           = "example-team-role-name"
   lambda_policy_name         = "example-team-policy-name"
-  slack_token                = "${data.kubernetes_secret.slack_cred.data["token"]}"
-  ecr_repo                   = "${data.kubernetes_secret.slack_cred.data["repo"]}"
+  slack_secret               = "<SLACK_SECRET>"
+  namespace                  = "<NAMESPACE>"
 
 }
