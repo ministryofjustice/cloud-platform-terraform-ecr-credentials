@@ -9,3 +9,6 @@ variable "aws_region" {
   default     = "eu-west-2"
 }
 
+variable "scan_on_push" {
+  default = true
+}
