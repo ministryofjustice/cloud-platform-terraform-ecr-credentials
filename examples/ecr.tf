@@ -30,25 +30,42 @@ resource "kubernetes_secret" "example_team_ecr_credentials" {
   }
 }
 
-########SLACK NOTIFIATIONS OF ECR SCAN RESULTS########################
 
-#To send notifications to slack of the ECR scanned results, you may insert the following two module that creates the lambda function
-# and also creates the even bridge that forwards the result details to the lambda function
+/*
+#############################################SLACK NOTIFIATIONS OF ECR SCAN RESULTS########################
 
-# SLACK KUBERNETES SECRET 
+To send notifications to slack of the ECR image scanned results, you may insert the following lambda module that creates the slack lambda function and the event bridge. 
 
-# Note that you will need to create a kubernetes secret that contains the slack token and the ECR repo.
+The event bridge will be triggered every time there is a scan completed for your ECR repo. The eventbridge executes the lambda function which then interacts with slack. A notification containing the scanned result will then be sent to your slack channel as per the slack token you specify.
 
-# The lambda needs the slack token and repo corresponding to the channel. The keys are set as environment variables. This secret needs
-# be created with the following keys:
+The lambda function dynamically consumes the slack_token and ecr_repo during its creation time. The slack_token and ecr_repo must be stored as a kubernetes secret, which you must create as follows:
 
-#Key 1: repo (without the pre-fix e.g if the url is 754256621582.dkr.ecr.eu-west-2.amazonaws.com/webops/webops-ecr1:rails, then in this case you need to supply 'webops/webops-ecr1')
-#Key 2: token
+This secret needs to have the following two keys:
 
-# You can run the following kubernets example command to the create the secret: 
+Key 1: repo (without the pre-fix e.g if the url is 754256621582.dkr.ecr.eu-west-2.amazonaws.com/webops/webops-ecr1:rails, then in this case you need to supply 'webops/webops-ecr1')
+Key 2: token
 
-# kubectl create secret generic <SLACK_SECRET_NAME> --from-literal=token=<SLACK_TOKEN> --from-literal=repo=<ECR_REPO> -n <NAMESPACE>
+Below is a sample kubernetes secret yaml you can use to create the secret containing the slack token and ECR repo: 
 
+apiVersion: v1
+kind: Secret
+metadata:
+  name: <SLACK_SECRET_NAME>
+  namespace: <NAMESPACE>
+data:
+  repo: <ECR_REPO_BASE64_ENCODED>
+  token: <SLACK_TOKEN_BASE64_ENDCODED>
+
+Note that the <ECR_REPO_BASE64_ENCODED> and <SLACK_TOKEN_BASE64_ENDCODED> must be encoded as base64.
+e.g 'echo -n <SLACK_TOKEN> | base64'
+
+As this file will contain the slack token it is important that it is encyrpted within a private repo that has git-encrypt. Also the file must reside within your own team's private repo and not a repo that is shared between teams such as the 'cloud-platform-environments'.
+
+Save the above secret yaml with the desired name and create the secret as follows: 
+
+kubectl create -f <SLACK_SECRET_FILE_NAME>
+
+Lastly, after you have created your kubernetes slack secret as above, move the following lambda module outside the comments section so that it is created alongside your ECR resource. 
 
 module "ecr_scan_lambda" {
 
@@ -61,3 +78,6 @@ module "ecr_scan_lambda" {
   namespace                  = "<NAMESPACE>"
 
 }
+
+*/
+
