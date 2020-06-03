@@ -8,8 +8,13 @@ module "example_team_ecr_credentials" {
   source    = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=4.0"
   repo_name = "example-module"
   team_name = "example-team"
-  # By default scan_on_push is set to true. To disable set it to false as below:
-  #scan_on_push = "false"  
+  /*
+    By default scan_on_push is set to true. When this is enabled then all images pushed to the repo are scanned for any security
+    / software vulnerabilities in your image and the results can be viewed in the conosle. For further details, please see: 
+    https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html 
+    To disable 'scan_on_push', set it to false as below:
+  scan_on_push = "false"  
+  */
 
   providers = {
     aws = aws.london
@@ -34,15 +39,15 @@ resource "kubernetes_secret" "example_team_ecr_credentials" {
 /*
 #############################################SLACK NOTIFIATIONS OF ECR SCAN RESULTS########################
 
-To send notifications to slack of the ECR image scanned results, you may insert the following lambda module that creates the slack lambda function and the event bridge. 
+To send notifications to slack of the ECR image scan results, you may insert the following lambda module that creates the slack lambda function and the event bridge. 
 
-The event bridge will be triggered every time there is a scan completed for your ECR repo. The eventbridge executes the lambda function which then interacts with slack. A notification containing the scanned result will then be sent to your slack channel as per the slack token you specify.
+The event bridge will be triggered every time there is a scan completed for your ECR repo. The event bridge executes the lambda function which then interacts with slack. A notification containing the scanned result will then be sent to your slack channel as per the slack token you specify.
 
 The lambda function dynamically consumes the slack_token and ecr_repo during its creation time. The slack_token and ecr_repo must be stored as a kubernetes secret, which you must create as follows:
 
 This secret needs to have the following two keys:
 
-Key 1: repo (without the pre-fix e.g if the url is 754256621582.dkr.ecr.eu-west-2.amazonaws.com/webops/webops-ecr1:rails, then in this case you need to supply 'webops/webops-ecr1')
+Key 1: repo (without the prefix e.g if the url is 754256621582.dkr.ecr.eu-west-2.amazonaws.com/webops/webops-ecr1:rails, then in this case you need to supply 'webops/webops-ecr1')
 Key 2: token
 
 Below is a sample kubernetes secret yaml you can use to create the secret containing the slack token and ECR repo: 
