@@ -76,7 +76,6 @@ module "ecr_scan_lambda" {
 
   source                     = "github.com/ministryofjustice/cloud-platform-terraform-lambda-ecr-slack?ref=v1.0"
   function_name              = "example-function-name"
-  handler                    = "lambda_ecr-scan-slack.lambda_handler"
   lambda_role_name           = "example-team-role-name"
   lambda_policy_name         = "example-team-policy-name"
   slack_secret               = "<SLACK_SECRET_NAME>"
