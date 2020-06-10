@@ -43,7 +43,7 @@ To send notifications to slack of the ECR image scan results, you may insert the
 
 The event bridge will be triggered every time there is a scan completed for your ECR repo. The event bridge executes the lambda function which then interacts with slack. A notification containing the scan result will then be sent to your slack channel as per the slack token you specify.
 
-The lambda function dynamically consumes the slack token and ECR repository during its creation time. The slack_token and ECR repository must be stored as a kubernetes secret, which you must create as follows:
+The lambda function incorporates the slack token and ECR repository when it is created. The slack_token and ECR repository must be stored as a kubernetes secret, which you must create as follows:
 
 This secret needs to have the following two keys:
 
