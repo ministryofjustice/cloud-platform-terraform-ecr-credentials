@@ -64,7 +64,7 @@ data:
 Note that the <ECR_REPO_BASE64_ENCODED> and <SLACK_TOKEN_BASE64_ENDCODED> must be encoded as base64.
 e.g 'echo -n <SLACK_TOKEN> | base64'
 
-As this file will contain the slack token it is important that it is encyrpted within a private repo that has git-encrypt. Also the file must reside within your own team's private repo and not a repo that is shared between teams such as the 'cloud-platform-environments'.
+As this file will contain the slack token it is important that it is encyrpted within the repo that has git-encrypt. Also the file must reside within your own team's repo and not a repo that is shared between teams such as the 'cloud-platform-environments'.
 
 Save the above secret yaml with the desired name and create the secret as follows: 
 
