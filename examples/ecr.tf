@@ -75,8 +75,11 @@ Lastly, after you have created your kubernetes slack secret as above, move the f
 module "ecr_scan_lambda" {
 
   source                     = "github.com/ministryofjustice/cloud-platform-terraform-lambda-ecr-slack?ref=v1.0"
+  # Function name can be as desired but unique, ideally prefixed with team name and the purpose of the function e.g 'webops_ecr_scan_function'
   function_name              = "example-function-name"
+  # Lambda role name as desired but unique ideally prefixed with team name e.g webops_ecr_scan_role
   lambda_role_name           = "example-team-role-name"
+  # Lambda policy name as desired but unique ideally prefixed with team name e.g webops_ecr_scan_policy
   lambda_policy_name         = "example-team-policy-name"
   slack_secret               = "<SLACK_SECRET_NAME>"
   namespace                  = "<NAMESPACE>"
