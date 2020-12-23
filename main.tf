@@ -1,8 +1,5 @@
-data "aws_caller_identity" "current" {
-}
-
-data "aws_region" "current" {
-}
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
