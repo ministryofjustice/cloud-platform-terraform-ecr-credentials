@@ -11,7 +11,7 @@ func TestSimpleEcrRepo(t *testing.T) {
 	t.Parallel()
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: "../examples/unit-test",
+		TerraformDir: "./unit-test",
 	})
 
 	defer terraform.Destroy(t, terraformOptions)
@@ -20,6 +20,7 @@ func TestSimpleEcrRepo(t *testing.T) {
 
 	repoArn := terraform.Output(t, terraformOptions, "repo_arn")
 	repoUrl := terraform.Output(t, terraformOptions, "repo_url")
-	assert.Equal(t, "arn:aws:ecr:eu-west-2:754256621582:repository/cloud-platform/ecr-repo-unit-test", repoArn)
-	assert.Equal(t, "754256621582.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/ecr-repo-unit-test", repoUrl)
+
+	assert.Equal(t, "arn:aws:ecr:eu-west-2:418216798584:repository/cloud-platform/ecr-repo-unit-test", repoArn)
+	assert.Equal(t, "418216798584.dkr.ecr.eu-west-2.amazonaws.com/cloud-platform/ecr-repo-unit-test", repoUrl)
 }
