@@ -15,10 +15,6 @@ module "example_team_ecr_credentials" {
     To disable 'scan_on_push', set it to false as below:
   scan_on_push = "false"
   */
-
-  providers = {
-    aws = aws.london
-  }
 }
 
 resource "kubernetes_secret" "example_team_ecr_credentials" {
