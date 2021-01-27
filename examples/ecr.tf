@@ -15,6 +15,11 @@ module "example_team_ecr_credentials" {
     To disable 'scan_on_push', set it to false as below:
   scan_on_push = "false"
   */
+
+  # Uncomment and provide repository names to create github actions secrets
+  # containing the ECR name, AWS access key, and AWS secret key, for use in
+  # github actions CI/CD pipelines
+  # github_repositories = ["my-repo"]
 }
 
 resource "kubernetes_secret" "example_team_ecr_credentials" {
