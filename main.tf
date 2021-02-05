@@ -8,6 +8,7 @@ resource "aws_ecr_repository" "repo" {
   }
 }
 
+
 resource "random_id" "user" {
   byte_length = 8
 }
