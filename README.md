@@ -19,6 +19,7 @@ access key, and AWS secret key.
 | aws_region | region into which the resource will be created | string | eu-west-2 | no |
 | providers | provider creating resources | arrays of string | default provider | no |
 | github_repositories | List of repositories in which to create github actions secrets | list of strings | no |
+| github_actions_secret_ecr_url | Name of the github actions secret containing the ECR URL | ECR_URL | no |
 | github_actions_secret_ecr_name | Name of the github actions secret containing the ECR name | ECR_NAME | no |
 | github_actions_secret_ecr_access_key | Name of the github actions secret containing the ECR AWS access key | ECR_AWS_ACCESS_KEY_ID | no |
 | github_actions_secret_ecr_secret_key | Name of the github actions secret containing the ECR AWS secret key | ECR_AWS_SECRET_ACCESS_KEY | no |
