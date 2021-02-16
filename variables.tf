@@ -23,6 +23,11 @@ variable "github_actions_secret_ecr_name" {
   default     = "ECR_NAME"
 }
 
+variable "github_actions_secret_ecr_url" {
+  description = "The name of the github actions secret containing the ECR URL"
+  default     = "ECR_URL"
+}
+
 variable "github_actions_secret_ecr_access_key" {
   description = "The name of the github actions secret containing the ECR AWS access key"
   default     = "ECR_AWS_ACCESS_KEY_ID"
