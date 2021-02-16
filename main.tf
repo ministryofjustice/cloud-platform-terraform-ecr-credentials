@@ -59,6 +59,13 @@ resource "aws_iam_user_policy" "policy" {
   user   = aws_iam_user.user.name
 }
 
+resource "github_actions_secret" "ecr_url" {
+  for_each        = toset(var.github_repositories)
+  repository      = each.key
+  secret_name     = var.github_actions_secret_ecr_url
+  plaintext_value = trimspace(aws_ecr_repository.repo.repository_url)
+}
+
 resource "github_actions_secret" "ecr_name" {
   for_each        = toset(var.github_repositories)
   repository      = each.key
