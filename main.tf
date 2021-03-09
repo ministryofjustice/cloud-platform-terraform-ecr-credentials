@@ -31,6 +31,8 @@ data "aws_iam_policy_document" "policy" {
       "ecr:ListImages",
       "ecr:DescribeImages",
       "ecr:BatchGetImage",
+      "ecr:ListTagsForResource",
+      "ecr:DescribeImageScanFindings"
     ]
 
     resources = [
@@ -44,7 +46,7 @@ data "aws_iam_policy_document" "policy" {
       "ecr:BatchDeleteImage",
       "ecr:UploadLayerPart",
       "ecr:InitiateLayerUpload",
-      "ecr:PutImage",
+      "ecr:PutImage"
     ]
 
     resources = [
