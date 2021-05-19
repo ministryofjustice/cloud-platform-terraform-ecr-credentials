@@ -14,7 +14,8 @@ func TestSimpleEcrRepo(t *testing.T) {
 		TerraformDir: "./unit-test",
 	})
 
-	defer terraform.Destroy(t, terraformOptions)
+	// we don't need this for dummy ECR in localstack
+	// defer terraform.Destroy(t, terraformOptions)
 
 	terraform.InitAndApply(t, terraformOptions)
 
