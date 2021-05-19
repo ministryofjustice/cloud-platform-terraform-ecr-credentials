@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -23,6 +22,6 @@ func TestSimpleEcrRepo(t *testing.T) {
 	repoArn := terraform.Output(t, terraformOptions, "repo_arn")
 	repoUrl := terraform.Output(t, terraformOptions, "repo_url")
 
-	assert.Equal(t, "arn:aws:ecr:eu-west-2:000000000000:repository/cloud-platform/ecr-repo-unit-test", fmt.Sprintf("\"%s\"", repoArn))
-	assert.Equal(t, "localhost:4510/cloud-platform/ecr-repo-unit-test", fmt.Sprintf("\"%s\"", repoUrl))
+	assert.Equal(t, "\"arn:aws:ecr:eu-west-2:000000000000:repository/cloud-platform/ecr-repo-unit-test\"", repoArn)
+	assert.Equal(t, "\"localhost:4510/cloud-platform/ecr-repo-unit-test\"", repoUrl)
 }
