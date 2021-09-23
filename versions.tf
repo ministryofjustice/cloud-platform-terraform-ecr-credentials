@@ -5,10 +5,11 @@ terraform {
     }
     github = {
       source = "integrations/github"
+      version = "~> 4.14.0"
     }
     random = {
       source = "hashicorp/random"
     }
   }
-  required_version = ">= 0.13"
+  required_version = ">= 0.14"
 }
