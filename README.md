@@ -36,7 +36,7 @@ access key, and AWS secret key.
 [github actions secrets]: https://docs.github.com/en/actions/reference/encrypted-secrets
 
 
-## SLACK NOTIFICATIONS OF ECR SCAN RESULTS
+## Slack notifications for ECR scan results
 
 To send notifications to slack of the ECR image scan results, you may insert the following lambda module that creates the slack lambda function and the event bridge.
 
