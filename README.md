@@ -36,7 +36,7 @@ access key, and AWS secret key.
 [github actions secrets]: https://docs.github.com/en/actions/reference/encrypted-secrets
 
 
-## SLACK NOTIFIATIONS OF ECR SCAN RESULTS
+## SLACK NOTIFICATIONS OF ECR SCAN RESULTS
 
 To send notifications to slack of the ECR image scan results, you may insert the following lambda module that creates the slack lambda function and the event bridge.
 
@@ -46,7 +46,7 @@ The lambda function incorporates the slack token and ECR repository when it is c
 
 This secret needs to have the following two keys:
 
-Key 1: repo (without the prefix e.g if the url is 754256621582.dkr.ecr.eu-west-2.amazonaws.com/webops/webops-ecr1:rails, then in this case you need to supply 'webops/webops-ecr1')
+Key 1: repo (without the prefix e.g if the url is `754256621582.dkr.ecr.eu-west-2.amazonaws.com/webops/webops-ecr1:rails`, then in this case you need to supply `webops/webops-ecr1`)
 
 Key 2: token
 
