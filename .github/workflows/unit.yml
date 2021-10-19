@@ -18,7 +18,7 @@ jobs:
           terraform_wrapper: false
 
       - name: Run tf Tests
-        working-directory: test
+        working-directory: test/unit-test
         run: |
           terraform init
           terraform validate
