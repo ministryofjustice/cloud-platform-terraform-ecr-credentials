@@ -25,7 +25,7 @@ module "ecr_credentials" {
 
 resource "kubernetes_secret" "ecr_credentials" {
   metadata {
-    name      = "ecr-credentials-output"
+    name      = "ecr-repo-${var.namespace}"
     namespace = var.namespace
   }
 
