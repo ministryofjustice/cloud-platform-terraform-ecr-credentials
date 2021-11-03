@@ -6,34 +6,19 @@ jobs:
   go-tests:
     name: Run Terratest Unit Tests
     runs-on: ubuntu-latest
-    services:
-      localstack:
-        image: localstack/localstack:0.12.10
-        env:
-          SERVICES: ecr,iam,sts
-          DEFAULT_REGION: eu-west-2
-          LOCALSTACK_API_KEY: ${{ secrets.LOCALSTACK_API_KEY }}
-        ports:
-          - 4566:4566
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Go
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.13
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 0.14.7
+          terraform_version: 0.14.8
           terraform_wrapper: false
 
-      - name: Download Go Modules
-        working-directory: test
-        run: go mod download
-
-      - name: Run Go Tests
-        working-directory: test
-        run: go test -v
+      - name: Run tf Tests
+        working-directory: test/unit-test
+        run: |
+          terraform init
+          terraform validate
