@@ -32,7 +32,9 @@ data "aws_iam_policy_document" "policy" {
       "ecr:DescribeImages",
       "ecr:BatchGetImage",
       "ecr:ListTagsForResource",
-      "ecr:DescribeImageScanFindings"
+      "ecr:DescribeImageScanFindings",
+      "inspector2:List*",
+      "inspector2:Get*"
     ]
 
     resources = [
