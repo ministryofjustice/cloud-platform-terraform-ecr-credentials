@@ -21,14 +21,14 @@ Commit your changes to a branch and raise a pull request. Once approved, you can
 Read the AWS key/secret out of your namespace with
 
 ```
-kubectl --context=example-team-context --namespace example-app-ns get secret example-team-ecr-credentials-output -o json
+kubectl --context=example-team-context --namespace example-app-ns get secret example-team-ecr-credentials-output -o json | jq -r '.data | .[] |= @base64d'
 
 ```
 
-With the AWS_ env vars exported, the usual ECR command apply, restricted by IAM policy to the namespace matching your Github team's slug:
+With the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env vars from the output above exported, the usual ECR command apply, restricted by IAM policy to the namespace matching your Github team's slug:
 
 ```
-eval $(aws ecr get-login --no-include-email)
+aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin <accountid>.dkr.ecr.eu-west-2.amazonaws.com
 
 aws ecr describe-repositories
 
