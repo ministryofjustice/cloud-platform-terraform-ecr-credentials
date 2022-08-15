@@ -10,32 +10,6 @@ If `github_repositories` is a non-empty list of strings, [github actions
 secrets] will be created in those repositories, containing the ECR name, AWS
 access key, and AWS secret key.
 
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| repo_name | name of the repository to be created | string | - | yes |
-| team_name | name of the team creating the credentials | string | - | yes |
-| aws_region | region into which the resource will be created | string | eu-west-2 | no |
-| providers | provider creating resources | arrays of string | default provider | no |
-| github_repositories | List of repositories in which to create github actions secrets | list of strings | no |
-| github_actions_secret_ecr_url | Name of the github actions secret containing the ECR URL | ECR_URL | no |
-| github_actions_secret_ecr_name | Name of the github actions secret containing the ECR name | ECR_NAME | no |
-| github_actions_secret_ecr_access_key | Name of the github actions secret containing the ECR AWS access key | ECR_AWS_ACCESS_KEY_ID | no |
-| github_actions_secret_ecr_secret_key | Name of the github actions secret containing the ECR AWS secret key | ECR_AWS_SECRET_ACCESS_KEY | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| access_key_id | Access key id for the new user |
-| secret_access_key | Secret for the new user |
-| repo_arn | ECR repository ARN |
-| repo_url | ECR repository URL |
-
-[github actions secrets]: https://docs.github.com/en/actions/reference/encrypted-secrets
-
-
 ## Slack notifications for ECR scan results
 
 To send notifications to slack of the ECR image scan results, you may insert the following lambda module that creates the slack lambda function and the event bridge.
@@ -82,3 +56,53 @@ module "ecr_scan_lambda" {
   namespace                  = var.namespace
 }
 ```
+
+<!--- BEGIN_TF_DOCS --->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.14 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
+| null | n/a |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| irsa_vpc_cni | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 4.6.0 |
+
+## Resources
+
+| Name |
+|------|
+| [aws_eks_addon](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon) |
+| [aws_iam_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [null_resource](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| addon\_coredns\_version | Version for addon\_coredns\_version | `string` | `"v1.8.4-eksbuild.1"` | no |
+| addon\_create\_coredns | Create coredns addon | `bool` | `true` | no |
+| addon\_create\_kube\_proxy | Create kube\_proxy addon | `bool` | `true` | no |
+| addon\_create\_vpc\_cni | Create vpc\_cni addon | `bool` | `true` | no |
+| addon\_kube\_proxy\_version | Version for addon\_kube\_proxy\_version | `string` | `"v1.21.2-eksbuild.2"` | no |
+| addon\_tags | Cluster addon tags | `map(string)` | `{}` | no |
+| addon\_vpc\_cni\_version | Version for addon\_create\_vpc\_cni | `string` | `"v1.9.3-eksbuild.1"` | no |
+| cluster\_name | Kubernetes cluster name - used to name (id) the auth0 resources | `any` | n/a | yes |
+| cluster\_oidc\_issuer\_url | Used to create the IAM OIDC role | `string` | `""` | no |
+| eks\_cluster\_id | trigger for null resource using eks\_cluster\_id | `any` | n/a | yes |
+
+## Outputs
+
+No output.
+
+<!--- END_TF_DOCS --->
