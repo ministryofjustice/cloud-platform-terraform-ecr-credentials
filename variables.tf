@@ -49,9 +49,3 @@ variable "github_actions_secret_ecr_secret_key" {
   default     = "ECR_AWS_SECRET_ACCESS_KEY"
   type        = string
 }
-
-variable "enable_ecr_env_secret" {
-  description = "Enable environment secret"
-  default     = false
-  type        = bool
-}
