@@ -1,3 +1,25 @@
+locals {
+  github_repositories = toset([
+    for repository in var.github_repositories : {
+      repository = repository
+    }
+  ])
+
+  github_environments = toset([
+    for environment in var.github_environments : {
+      environment = environment
+    }
+  ])
+
+  github_repo_environments = [
+    for pair in setproduct(local.github_repositories, local.github_environments) : {
+      repository  = pair[0].repository
+      environment = pair[1].environment
+
+    }
+  ]
+}
+
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
@@ -87,6 +109,49 @@ resource "github_actions_secret" "ecr_access_key" {
 resource "github_actions_secret" "ecr_secret_key" {
   for_each        = toset(var.github_repositories)
   repository      = each.key
+  secret_name     = var.github_actions_secret_ecr_secret_key
+  plaintext_value = aws_iam_access_key.key.secret
+}
+
+
+# Create environment secrets
+
+resource "github_actions_environment_secret" "ecr_url" {
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
+  secret_name     = var.github_actions_secret_ecr_url
+  plaintext_value = trimspace(aws_ecr_repository.repo.repository_url)
+}
+
+resource "github_actions_environment_secret" "ecr_name" {
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
+  secret_name     = var.github_actions_secret_ecr_name
+  plaintext_value = trimspace(aws_ecr_repository.repo.name)
+}
+
+resource "github_actions_environment_secret" "ecr_access_key" {
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
+  secret_name     = var.github_actions_secret_ecr_access_key
+  plaintext_value = aws_iam_access_key.key.id
+}
+
+resource "github_actions_environment_secret" "ecr_secret_key" {
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_secret_key
   plaintext_value = aws_iam_access_key.key.secret
 }

@@ -21,7 +21,13 @@ module "ecr_credentials" {
   # containing the ECR name, AWS access key, and AWS secret key, for use in
   # github actions CI/CD pipelines
   # github_repositories = ["my-repo"]
+
+  # list of github environments, to create the ECR secrets as environment secrets
+  # https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#environment-secrets
+  # github_environments = ["my-environment"]
+
 }
+
 
 resource "kubernetes_secret" "ecr_credentials" {
   metadata {
