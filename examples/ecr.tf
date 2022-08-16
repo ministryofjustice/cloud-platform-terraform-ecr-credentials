@@ -22,10 +22,12 @@ module "ecr_credentials" {
   # github actions CI/CD pipelines
   # github_repositories = ["my-repo"]
 
-  # Enabling "enable_ecr_env_secret" will create ECR secrets as "Environment secrets"
+  # list of github environments, to create the ECR secrets as environment secrets
   # https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#environment-secrets
-  enable_ecr_env_secret   = true
+  # github_environments = ["my-environment"]
+
 }
+
 
 resource "kubernetes_secret" "ecr_credentials" {
   metadata {

@@ -1,9 +1,23 @@
 locals {
-  customer_env = toset([
+  github_repositories = toset([
     for repository in var.github_repositories : {
       repository = repository
     }
   ])
+
+  github_environments = toset([
+    for environment in var.github_environments : {
+      environment = environment
+    }
+  ])
+
+  github_repo_environments = [
+    for pair in setproduct(local.github_repositories, local.github_environments) : {
+      repository  = pair[0].repository
+      environment = pair[1].environment
+
+    }
+  ]
 }
 
 data "aws_caller_identity" "current" {}
@@ -100,64 +114,44 @@ resource "github_actions_secret" "ecr_secret_key" {
 }
 
 
-# Create environment and add ecr secrets as environment secrets
-resource "github_repository_environment" "repo_environment" {
-  for_each = var.enable_ecr_env_secret == true ? {
-    for i in local.customer_env :
-    i.repository => i
-  } : {}
-  repository  = each.key
-  environment = "${each.key}-ecr"
-}
+# Create environment secrets
 
 resource "github_actions_environment_secret" "ecr_url" {
-  for_each = var.enable_ecr_env_secret == true ? {
-    for i in local.customer_env :
-    i.repository => i
-  } : {}
-  repository      = each.key
-  environment     = "${each.key}-ecr"
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_url
   plaintext_value = trimspace(aws_ecr_repository.repo.repository_url)
-
-  depends_on = [github_repository_environment.repo_environment]
 }
 
 resource "github_actions_environment_secret" "ecr_name" {
-  for_each = var.enable_ecr_env_secret == true ? {
-    for i in local.customer_env :
-    i.repository => i
-  } : {}
-  repository      = each.key
-  environment     = "${each.key}-ecr"
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_name
   plaintext_value = trimspace(aws_ecr_repository.repo.name)
-
-  depends_on = [github_repository_environment.repo_environment]
 }
 
 resource "github_actions_environment_secret" "ecr_access_key" {
-  for_each = var.enable_ecr_env_secret == true ? {
-    for i in local.customer_env :
-    i.repository => i
-  } : {}
-  repository      = each.key
-  environment     = "${each.key}-ecr"
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_access_key
   plaintext_value = aws_iam_access_key.key.id
-
-  depends_on = [github_repository_environment.repo_environment]
 }
 
 resource "github_actions_environment_secret" "ecr_secret_key" {
-  for_each = var.enable_ecr_env_secret == true ? {
-    for i in local.customer_env :
-    i.repository => i
-  } : {}
-  repository      = each.key
-  environment     = "${each.key}-ecr"
+  for_each = {
+    for i in local.github_repo_environments : "${i.repository}.${i.environment}" => i
+  }
+  repository      = each.value.repository
+  environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_secret_key
   plaintext_value = aws_iam_access_key.key.secret
-
-  depends_on = [github_repository_environment.repo_environment]
 }

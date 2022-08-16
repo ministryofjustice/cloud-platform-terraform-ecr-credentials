@@ -20,6 +20,12 @@ variable "github_repositories" {
   type        = list(string)
 }
 
+variable "github_environments" {
+  description = "GitHub environment in which to create github actions secrets"
+  type        = list(string)
+  default     = []
+}
+
 variable "github_actions_secret_ecr_name" {
   description = "The name of the github actions secret containing the ECR name"
   default     = "ECR_NAME"
