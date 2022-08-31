@@ -30,6 +30,13 @@ resource "aws_ecr_repository" "repo" {
   }
 }
 
+# Lifecycle policy
+resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
+  count      = var.lifecycle_policy == null ? 0 : 1
+  repository = aws_ecr_repository.repo.name
+  policy     = var.lifecycle_policy
+}
+
 resource "random_id" "user" {
   byte_length = 8
 }
@@ -70,7 +77,9 @@ data "aws_iam_policy_document" "policy" {
       "ecr:BatchDeleteImage",
       "ecr:UploadLayerPart",
       "ecr:InitiateLayerUpload",
-      "ecr:PutImage"
+      "ecr:PutImage",
+      "ecr:SetRepositoryPolicy",
+      "ecr:DeleteRepositoryPolicy"
     ]
 
     resources = [

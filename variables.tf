@@ -49,3 +49,10 @@ variable "github_actions_secret_ecr_secret_key" {
   default     = "ECR_AWS_SECRET_ACCESS_KEY"
   type        = string
 }
+
+# Lifecycle policy
+variable "lifecycle_policy" {
+  description = "A lifecycle policy consists of one or more rules that determine which images in a repository should be expired."
+  type        = string
+  default     = null
+}
