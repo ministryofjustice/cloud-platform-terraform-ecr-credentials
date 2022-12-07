@@ -16,7 +16,7 @@ access key, and AWS secret key.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.27.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | >= 4.14.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.0.0 |
 
@@ -24,7 +24,7 @@ access key, and AWS secret key.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.27.0 |
 | <a name="provider_github"></a> [github](#provider\_github) | >= 4.14.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 2.0.0 |
 
