@@ -10,7 +10,7 @@ If `github_repositories` is a non-empty list of strings, [github actions
 secrets] will be created in those repositories, containing the ECR name, AWS
 access key, and AWS secret key.
 
-<!--- BEGIN_TF_DOCS --->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -78,4 +78,4 @@ No modules.
 | <a name="output_repo_url"></a> [repo\_url](#output\_repo\_url) | ECR repository URL |
 | <a name="output_secret_access_key"></a> [secret\_access\_key](#output\_secret\_access\_key) | Secret for the new credentials |
 
-<!--- END_TF_DOCS --->
+<!-- END_TF_DOCS -->
