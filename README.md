@@ -77,5 +77,4 @@ No modules.
 | <a name="output_repo_arn"></a> [repo\_arn](#output\_repo\_arn) | ECR repository ARN |
 | <a name="output_repo_url"></a> [repo\_url](#output\_repo\_url) | ECR repository URL |
 | <a name="output_secret_access_key"></a> [secret\_access\_key](#output\_secret\_access\_key) | Secret for the new credentials |
-
 <!-- END_TF_DOCS -->
