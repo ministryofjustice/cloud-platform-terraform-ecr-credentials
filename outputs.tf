@@ -1,11 +1,11 @@
 output "access_key_id" {
   description = "Access key id for the credentials"
-  value       = aws_iam_access_key.key.id
+  value       = aws_iam_access_key.key_2023.id
 }
 
 output "secret_access_key" {
   description = "Secret for the new credentials"
-  value       = aws_iam_access_key.key.secret
+  value       = aws_iam_access_key.key_2023.secret
 }
 
 output "repo_arn" {
@@ -17,4 +17,3 @@ output "repo_url" {
   description = "ECR repository URL"
   value       = aws_ecr_repository.repo.repository_url
 }
-
