@@ -46,8 +46,8 @@ resource "aws_iam_user" "user" {
   path = "/system/ecr-user/${var.team_name}/"
 }
 
-resource "aws_iam_access_key" "key" {
-  user = aws_iam_user.user.name
+resource "aws_iam_access_key" "key_2023" {
+  user   = aws_iam_user.user.name
 }
 
 data "aws_iam_policy_document" "policy" {
@@ -112,14 +112,14 @@ resource "github_actions_secret" "ecr_access_key" {
   for_each        = toset(var.github_repositories)
   repository      = each.key
   secret_name     = var.github_actions_secret_ecr_access_key
-  plaintext_value = aws_iam_access_key.key.id
+  plaintext_value = aws_iam_access_key.key_2023.id
 }
 
 resource "github_actions_secret" "ecr_secret_key" {
   for_each        = toset(var.github_repositories)
   repository      = each.key
   secret_name     = var.github_actions_secret_ecr_secret_key
-  plaintext_value = aws_iam_access_key.key.secret
+  plaintext_value = aws_iam_access_key.key_2023.secret
 }
 
 
@@ -152,7 +152,7 @@ resource "github_actions_environment_secret" "ecr_access_key" {
   repository      = each.value.repository
   environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_access_key
-  plaintext_value = aws_iam_access_key.key.id
+  plaintext_value = aws_iam_access_key.key_2023.id
 }
 
 resource "github_actions_environment_secret" "ecr_secret_key" {
@@ -162,5 +162,5 @@ resource "github_actions_environment_secret" "ecr_secret_key" {
   repository      = each.value.repository
   environment     = each.value.environment
   secret_name     = var.github_actions_secret_ecr_secret_key
-  plaintext_value = aws_iam_access_key.key.secret
+  plaintext_value = aws_iam_access_key.key_2023.secret
 }
