@@ -39,18 +39,31 @@ No modules.
 | [aws_ecr_lifecycle_policy.lifecycle_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_lifecycle_policy) | resource |
 | [aws_ecr_repository.repo](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
 | [aws_iam_access_key.key_2023](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
+| [aws_iam_policy.ecr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_role.oidc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.ecr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_user.user](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
 | [aws_iam_user_policy.policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) | resource |
 | [github_actions_environment_secret.ecr_access_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
 | [github_actions_environment_secret.ecr_name](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
 | [github_actions_environment_secret.ecr_secret_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
 | [github_actions_environment_secret.ecr_url](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
+| [github_actions_environment_secret.role_to_assume](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
+| [github_actions_environment_variable.ecr_region](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_variable) | resource |
+| [github_actions_environment_variable.ecr_repository](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_variable) | resource |
 | [github_actions_secret.ecr_access_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ecr_name](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ecr_secret_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ecr_url](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.role_to_assume](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_variable.ecr_region](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
+| [github_actions_variable.ecr_repository](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
+| [random_id.oidc](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [random_id.user](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_openid_connect_provider.github](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_openid_connect_provider) | data source |
+| [aws_iam_policy_document.ecr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.github](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
@@ -58,6 +71,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_github_actions_prefix"></a> [github\_actions\_prefix](#input\_github\_actions\_prefix) | String prefix for GitHub Actions variable and secrets key | `string` | `""` | no |
 | <a name="input_github_actions_secret_ecr_access_key"></a> [github\_actions\_secret\_ecr\_access\_key](#input\_github\_actions\_secret\_ecr\_access\_key) | The name of the github actions secret containing the ECR AWS access key | `string` | `"ECR_AWS_ACCESS_KEY_ID"` | no |
 | <a name="input_github_actions_secret_ecr_name"></a> [github\_actions\_secret\_ecr\_name](#input\_github\_actions\_secret\_ecr\_name) | The name of the github actions secret containing the ECR name | `string` | `"ECR_NAME"` | no |
 | <a name="input_github_actions_secret_ecr_secret_key"></a> [github\_actions\_secret\_ecr\_secret\_key](#input\_github\_actions\_secret\_ecr\_secret\_key) | The name of the github actions secret containing the ECR AWS secret key | `string` | `"ECR_AWS_SECRET_ACCESS_KEY"` | no |
@@ -65,6 +79,7 @@ No modules.
 | <a name="input_github_environments"></a> [github\_environments](#input\_github\_environments) | GitHub environment in which to create github actions secrets | `list(string)` | `[]` | no |
 | <a name="input_github_repositories"></a> [github\_repositories](#input\_github\_repositories) | GitHub repositories in which to create github actions secrets | `list(string)` | `[]` | no |
 | <a name="input_lifecycle_policy"></a> [lifecycle\_policy](#input\_lifecycle\_policy) | A lifecycle policy consists of one or more rules that determine which images in a repository should be expired. | `string` | `null` | no |
+| <a name="input_oidc_providers"></a> [oidc\_providers](#input\_oidc\_providers) | OIDC providers for this ECR repository, valid values are "github" | `list(string)` | `[]` | no |
 | <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Name of the repository to be created | `string` | n/a | yes |
 | <a name="input_scan_on_push"></a> [scan\_on\_push](#input\_scan\_on\_push) | Whether images are scanned after being pushed to the repository (true) or not (false) | `bool` | `true` | no |
 | <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Name of the team creating the credentials | `string` | n/a | yes |
