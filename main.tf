@@ -266,9 +266,9 @@ resource "aws_iam_role_policy_attachment" "ecr" {
 # GitHub Actions variables and secrets
 locals {
   github_variable_names = {
-    ECR_ROLE_TO_ASSUME = join("_", compact([var.github_actions_prefix, "ECR_ROLE_TO_ASSUME"]))
-    ECR_REGION         = join("_", compact([var.github_actions_prefix, "ECR_REGION"]))
-    ECR_REPOSITORY     = join("_", compact([var.github_actions_prefix, "ECR_REPOSITORY"]))
+    ECR_ROLE_TO_ASSUME = upper(join("_", compact([var.github_actions_prefix, "ECR_ROLE_TO_ASSUME"])))
+    ECR_REGION         = upper(join("_", compact([var.github_actions_prefix, "ECR_REGION"])))
+    ECR_REPOSITORY     = upper(join("_", compact([var.github_actions_prefix, "ECR_REPOSITORY"])))
   }
 
   github_repos = toset(var.github_repositories)
