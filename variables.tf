@@ -56,3 +56,18 @@ variable "lifecycle_policy" {
   type        = string
   default     = null
 }
+
+########
+# OIDC #
+########
+variable "oidc_providers" {
+  description = "OIDC providers for this ECR repository, valid values are \"github\""
+  type        = list(string)
+  default     = []
+}
+
+variable "github_actions_prefix" {
+  description = "String prefix for GitHub Actions variable and secrets key"
+  type        = string
+  default     = ""
+}
