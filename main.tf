@@ -293,8 +293,10 @@ resource "github_actions_secret" "role_to_assume" {
   depends_on = [aws_iam_role.oidc]
 }
 
+# Create variables either in the environments or in general actions, not both.
+
 resource "github_actions_variable" "ecr_region" {
-  for_each = local.github_repos
+  for_each = length(var.github_environments) == 0 ? toset([]) : local.github_repos
 
   repository    = each.key
   variable_name = local.github_variable_names["ECR_REGION"]
@@ -302,7 +304,7 @@ resource "github_actions_variable" "ecr_region" {
 }
 
 resource "github_actions_variable" "ecr_repository" {
-  for_each = local.github_repos
+  for_each = length(var.github_environments) == 0 ? toset([]) : local.github_repos
 
   repository    = each.key
   variable_name = local.github_variable_names["ECR_REPOSITORY"]
