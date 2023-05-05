@@ -284,7 +284,7 @@ locals {
 
 # Actions
 resource "github_actions_secret" "role_to_assume" {
-  for_each = local.github_repos
+  for_each = contains(var.oidc_providers, "github") ? local.github_repos : []
 
   repository      = each.key
   secret_name     = local.github_variable_names["ECR_ROLE_TO_ASSUME"]
@@ -311,7 +311,7 @@ resource "github_actions_variable" "ecr_repository" {
 
 # Environments
 resource "github_actions_environment_secret" "role_to_assume" {
-  for_each = local.github_repo_envs
+  for_each = contains(var.oidc_providers, "github") ? local.github_repo_envs : []
 
   repository      = each.value.repository
   environment     = each.value.environment
