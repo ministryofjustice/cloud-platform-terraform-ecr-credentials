@@ -167,15 +167,31 @@ resource "github_actions_environment_secret" "ecr_secret_key" {
 # OIDC integration #
 ####################
 locals {
+  # Identifiers
+  oidc_identifier = "cloud-platform-ecr-${random_id.oidc.hex}"
+
+  # Providers
   oidc_providers = {
     github = "token.actions.githubusercontent.com"
   }
 
-  oidc_providers_assume_role_policies = {
-    github = data.aws_iam_policy_document.github.json
+  # GitHub
+  enable_github = contains(var.oidc_providers, "github")
+  github_repos  = toset(var.github_repositories)
+  github_envs   = toset(var.github_environments)
+  github_repo_envs = {
+    for pair in setproduct(local.github_repos, local.github_envs) :
+    "${pair[0]}.${pair[1]}" => {
+      repository  = pair[0]
+      environment = pair[1]
+    }
   }
-
-  identifier_oidc = "cloud-platform-ecr-${random_id.oidc.hex}"
+  github_actions_prefix = upper(var.github_actions_prefix)
+  github_variable_names = {
+    ECR_ROLE_TO_ASSUME = join("_", compact([local.github_actions_prefix, "ECR_ROLE_TO_ASSUME"]))
+    ECR_REGION         = join("_", compact([local.github_actions_prefix, "ECR_REGION"]))
+    ECR_REPOSITORY     = join("_", compact([local.github_actions_prefix, "ECR_REPOSITORY"]))
+  }
 }
 
 # Random ID for identifiers
@@ -183,43 +199,11 @@ resource "random_id" "oidc" {
   byte_length = 8
 }
 
-# GitHub: OIDC provider
-data "aws_iam_openid_connect_provider" "github" {
-  url = "https://${local.oidc_providers.github}"
-}
-
-# GitHub: Assume role policy
-# See: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#adding-the-identity-provider-to-aws
-data "aws_iam_policy_document" "github" {
-  version = "2012-10-17"
-
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-
-    principals {
-      type        = "Federated"
-      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
-    }
-
-    condition {
-      test     = length(var.github_repositories) == 1 ? "StringLike" : "ForAnyValue:StringLike"
-      variable = "${local.oidc_providers.github}:sub"
-      values   = formatlist("repo:ministryofjustice/%s:*", toset(var.github_repositories))
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "${local.oidc_providers.github}:aud"
-      values   = ["sts.amazonaws.com"]
-    }
-  }
-}
-
-# ECR policy
+# Base ECR policy for pushing and pulling images, can be used across all OIDC providers
 # See: https://github.com/aws-actions/amazon-ecr-login#permissions
-data "aws_iam_policy_document" "ecr" {
+data "aws_iam_policy_document" "base" {
   version = "2012-10-17"
+
   statement {
     sid       = "AllowLogin"
     effect    = "Allow"
@@ -243,86 +227,99 @@ data "aws_iam_policy_document" "ecr" {
   }
 }
 
-# IAM roles, policies, and policy attachments
-resource "aws_iam_role" "oidc" {
-  for_each = toset(var.oidc_providers) # one role per provider
-
-  name               = "${local.identifier_oidc}-${each.key}"
-  assume_role_policy = local.oidc_providers_assume_role_policies[each.key]
-}
-
+# You can reuse this policy across multiple roles
 resource "aws_iam_policy" "ecr" {
-  name   = local.identifier_oidc
-  policy = data.aws_iam_policy_document.ecr.json
+  count = (length(var.oidc_providers) > 0) ? 1 : 0
+
+  name   = local.oidc_identifier
+  policy = data.aws_iam_policy_document.base.json
 }
 
-resource "aws_iam_role_policy_attachment" "ecr" {
-  for_each = aws_iam_role.oidc
-
-  role       = each.value.name
-  policy_arn = aws_iam_policy.ecr.arn
+# GitHub: OIDC provider
+data "aws_iam_openid_connect_provider" "github" {
+  url = "https://${local.oidc_providers.github}"
 }
 
-# GitHub Actions variables and secrets
-locals {
-  github_variable_names = {
-    ECR_ROLE_TO_ASSUME = upper(join("_", compact([var.github_actions_prefix, "ECR_ROLE_TO_ASSUME"])))
-    ECR_REGION         = upper(join("_", compact([var.github_actions_prefix, "ECR_REGION"])))
-    ECR_REPOSITORY     = upper(join("_", compact([var.github_actions_prefix, "ECR_REPOSITORY"])))
-  }
+# GitHub: Assume role policy
+# See: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#adding-the-identity-provider-to-aws
+data "aws_iam_policy_document" "github" {
+  version = "2012-10-17"
 
-  github_repos = toset(var.github_repositories)
-  github_envs  = toset(var.github_environments)
-  github_repo_envs = {
-    for pair in setproduct(local.github_repos, local.github_envs) :
-    "${pair[0]}.${pair[1]}" => {
-      repository  = pair[0]
-      environment = pair[1]
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = (length(local.github_repos) == 1) ? "StringLike" : "ForAnyValue:StringLike"
+      variable = "${local.oidc_providers.github}:sub"
+      values   = formatlist("repo:ministryofjustice/%s:*", local.github_repos)
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${local.oidc_providers.github}:aud"
+      values   = ["sts.amazonaws.com"]
     }
   }
 }
 
+# IAM role and policy attachment for ECR
+resource "aws_iam_role" "github" {
+  count = local.enable_github ? 1 : 0
+
+  name               = "${local.oidc_identifier}-github"
+  assume_role_policy = data.aws_iam_policy_document.github.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_ecr" {
+  count = local.enable_github ? 1 : 0
+
+  role       = aws_iam_role.github[0].name
+  policy_arn = aws_iam_policy.ecr[0].arn
+}
+
 # Actions
-resource "github_actions_secret" "role_to_assume" {
-  for_each = contains(var.oidc_providers, "github") ? local.github_repos : []
+resource "github_actions_secret" "ecr_role_to_assume" {
+  for_each = local.enable_github ? local.github_repos : []
 
-  repository      = each.key
+  repository      = each.value
   secret_name     = local.github_variable_names["ECR_ROLE_TO_ASSUME"]
-  plaintext_value = aws_iam_role.oidc["github"].arn
-
-  depends_on = [aws_iam_role.oidc]
+  plaintext_value = aws_iam_role.github[0].arn
 }
 
 resource "github_actions_variable" "ecr_region" {
-  for_each = local.github_repos
+  for_each = local.enable_github ? local.github_repos : []
 
-  repository    = each.key
+  repository    = each.value
   variable_name = local.github_variable_names["ECR_REGION"]
   value         = data.aws_region.current.name
 }
 
 resource "github_actions_variable" "ecr_repository" {
-  for_each = local.github_repos
+  for_each = local.enable_github ? local.github_repos : []
 
-  repository    = each.key
+  repository    = each.value
   variable_name = local.github_variable_names["ECR_REPOSITORY"]
   value         = aws_ecr_repository.repo.name
 }
 
 # Environments
-resource "github_actions_environment_secret" "role_to_assume" {
-  for_each = contains(var.oidc_providers, "github") ? local.github_repo_envs : {}
+resource "github_actions_environment_secret" "ecr_role_to_assume" {
+  for_each = local.enable_github ? local.github_repo_envs : {}
 
   repository      = each.value.repository
   environment     = each.value.environment
   secret_name     = local.github_variable_names["ECR_ROLE_TO_ASSUME"]
-  plaintext_value = aws_iam_role.oidc["github"].arn
-
-  depends_on = [aws_iam_role.oidc]
+  plaintext_value = aws_iam_role.github[0].arn
 }
 
 resource "github_actions_environment_variable" "ecr_region" {
-  for_each = local.github_repo_envs
+  for_each = local.enable_github ? local.github_repo_envs : {}
 
   repository    = each.value.repository
   environment   = each.value.environment
@@ -331,7 +328,7 @@ resource "github_actions_environment_variable" "ecr_region" {
 }
 
 resource "github_actions_environment_variable" "ecr_repository" {
-  for_each = local.github_repo_envs
+  for_each = local.enable_github ? local.github_repo_envs : {}
 
   repository    = each.value.repository
   environment   = each.value.environment
