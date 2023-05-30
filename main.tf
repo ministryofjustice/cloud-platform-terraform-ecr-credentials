@@ -166,13 +166,22 @@ resource "github_actions_environment_secret" "ecr_secret_key" {
 ####################
 # OIDC integration #
 ####################
+data "aws_secretsmanager_secret" "circleci" {
+  name = "cloud-platform-circleci"
+}
+
+data "aws_secretsmanager_secret_version" "circleci" {
+  secret_id = data.aws_secretsmanager_secret.circleci.id
+}
+
 locals {
   # Identifiers
   oidc_identifier = "cloud-platform-ecr-${random_id.oidc.hex}"
 
   # Providers
   oidc_providers = {
-    github = "token.actions.githubusercontent.com"
+    github   = "token.actions.githubusercontent.com"
+    circleci = "oidc.circleci.com/org/${jsondecode(data.aws_secretsmanager_secret_version.circleci.secret_string)["organisation_id"]}"
   }
 
   # GitHub
@@ -192,6 +201,10 @@ locals {
     ECR_REGION         = join("_", compact([local.github_actions_prefix, "ECR_REGION"]))
     ECR_REPOSITORY     = join("_", compact([local.github_actions_prefix, "ECR_REPOSITORY"]))
   }
+
+  # CircleCI
+  enable_circleci          = contains(var.oidc_providers, "circleci")
+  circleci_organisation_id = jsondecode(data.aws_secretsmanager_secret_version.circleci.secret_string)["organisation_id"]
 }
 
 # Random ID for identifiers
@@ -334,4 +347,71 @@ resource "github_actions_environment_variable" "ecr_repository" {
   environment   = each.value.environment
   variable_name = local.github_variable_names["ECR_REPOSITORY"]
   value         = aws_ecr_repository.repo.name
+}
+
+# CircleCI: OIDC provider
+data "aws_iam_openid_connect_provider" "circleci" {
+  url = "https://${local.oidc_providers.circleci}"
+}
+
+# CircleCI: Assume role policy
+# See: https://circleci.com/docs/openid-connect-tokens/#advanced-usage
+# The :sub value requires a user to use version 2 (not version 1) of CircleCI's OIDC token,
+# as that is the only way to restrict the push by the VCS (e.g. GitHub) origin.
+data "aws_iam_policy_document" "circleci" {
+  version = "2012-10-17"
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
+    principals {
+      type        = "Federated"
+      identifiers = [data.aws_iam_openid_connect_provider.circleci.arn]
+    }
+
+    condition {
+      test     = (length(local.github_repos) == 1) ? "StringLike" : "ForAnyValue:StringLike"
+      variable = "${local.oidc_providers.circleci}:sub"
+      values   = formatlist("org/${local.circleci_organisation_id}/project/*/user/*/vcs-origin/github.com/ministryofjustice/%s/vcs-ref/refs/heads/*", local.github_repos)
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${local.oidc_providers.circleci}:aud"
+      values   = [local.circleci_organisation_id]
+    }
+  }
+}
+
+# IAM role and policy attachment for ECR
+resource "aws_iam_role" "circleci" {
+  count = local.enable_circleci ? 1 : 0
+
+  name               = "${local.oidc_identifier}-circleci"
+  assume_role_policy = data.aws_iam_policy_document.circleci.json
+}
+
+resource "aws_iam_role_policy_attachment" "circleci_ecr" {
+  count = local.enable_circleci ? 1 : 0
+
+  role       = aws_iam_role.circleci[0].name
+  policy_arn = aws_iam_policy.ecr[0].arn
+}
+
+# Create a ConfigMap for a user to retrieve the ECR_* variables
+# as they need to be set in CircleCI manually
+resource "kubernetes_config_map_v1" "circleci_oidc" {
+  count = (local.enable_circleci && (var.namespace != null)) ? 1 : 0
+
+  metadata {
+    name      = "${replace(var.repo_name, "_", "-")}-circleci"
+    namespace = var.namespace
+  }
+
+  data = {
+    ecr_role_to_assume = aws_iam_role.circleci[0].arn
+    ecr_region         = data.aws_region.current.name
+    ecr_repository     = aws_ecr_repository.repo.name
+  }
 }

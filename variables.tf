@@ -8,6 +8,12 @@ variable "team_name" {
   type        = string
 }
 
+variable "namespace" {
+  description = "Namespace name"
+  type        = string
+  default     = null
+}
+
 variable "scan_on_push" {
   default     = true
   description = "Whether images are scanned after being pushed to the repository (true) or not (false)"
@@ -61,7 +67,7 @@ variable "lifecycle_policy" {
 # OIDC #
 ########
 variable "oidc_providers" {
-  description = "OIDC providers for this ECR repository, valid values are \"github\""
+  description = "OIDC providers for this ECR repository, valid values are \"github\" or \"circleci\""
   type        = list(string)
   default     = []
 }
