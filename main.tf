@@ -413,5 +413,6 @@ resource "kubernetes_config_map_v1" "circleci_oidc" {
     ecr_role_to_assume = aws_iam_role.circleci[0].arn
     ecr_region         = data.aws_region.current.name
     ecr_repository     = aws_ecr_repository.repo.name
+    ecr_registry_id    = data.aws_caller_identity.current.account_id
   }
 }
