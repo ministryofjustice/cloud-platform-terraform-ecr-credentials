@@ -7,4 +7,5 @@ module "ecr" {
 
   repo_name = "ecr-repo-unit-test"
   team_name = "cloud-platform"
+  namespace = "cloud-platform"
 }

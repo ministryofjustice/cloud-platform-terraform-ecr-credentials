@@ -1,16 +1,18 @@
-# AWS ECR Terraform module
+# cloud-platform-terraform-ecr-credentials
 
 <a href="https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/releases">
   <img src="https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-ecr-credentials/all.svg" alt="Releases" />
 </a>
 
-This terraform module will create an ECR repository and IAM credentials to access it; see the [examples/](examples/) dir or `cloud-platform environment ecr create`.
+This Terraform module will create an AWS ECR repository for use on the Cloud Platform.
 
-If `github_repositories` is a non-empty list of strings, [github actions
-secrets] will be created in those repositories, containing the ECR name, AWS
-access key, and AWS secret key.
+If you're using GitHub as your OIDC provider, it will automatically create the required variables for authentication in your GitHub repository.
 
-<!--- BEGIN_TF_DOCS --->
+If you're using CircleCI as your OIDC provider, it will create a Kubernetes ConfigMap with your authentication variables to use as environment variables in CircleCI.
+
+This module only supports authentication with GitHub Actions and CircleCI.
+
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -102,5 +104,4 @@ No modules.
 | <a name="output_repo_arn"></a> [repo\_arn](#output\_repo\_arn) | ECR repository ARN |
 | <a name="output_repo_url"></a> [repo\_url](#output\_repo\_url) | ECR repository URL |
 | <a name="output_secret_access_key"></a> [secret\_access\_key](#output\_secret\_access\_key) | Secret for the new credentials |
-
-<!--- END_TF_DOCS --->
+<!-- END_TF_DOCS -->
