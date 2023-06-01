@@ -3,14 +3,9 @@
  * the next 3 variables are automatically supplied by the pipeline.
  *
 */
-variable "cluster_name" {
-}
-variable "kubernetes_cluster" {
-}
-variable "github_token" {
-  description = "Required by the github terraform provider"
-  default     = ""
-}
+variable "cluster_name" {}
+
+variable "kubernetes_cluster" {}
 
 variable "application" {
   description = "Name of Application you are deploying"
@@ -53,4 +48,9 @@ variable "slack_channel" {
 variable "github_owner" {
   description = "Required by the github terraform provider"
   default     = "ministryofjustice"
+}
+
+variable "github_token" {
+  description = "Required by the github terraform provider"
+  default     = ""
 }

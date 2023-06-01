@@ -1,41 +1,9 @@
-# Example AWS ECR Repo Credentials configuration
+# Example container repository configuration
 
-Configuration in this directory creates example ECR repository and credentials.
-
-This example is designed to be used in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments/) repository.
-
-The output will be in a kubernetes `Secret`, which includes the values of `access_key_id`, `secret_access_key`, `repo_arn` and `repo_url`.
+This example is designed to be used in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments) repository.
 
 ## Usage
 
-In your namespace's path in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments/) repository, create a directory called `resources` (if you have not created one already) and refer to the contents of [main.tf](main.tf) to define the module properties. Make sure to change placeholder values to what is appropriate and refer to the top-level README file in this repository for extra variables that you can use to further customise your resource.
+In your namespace's `resources/` directory in the [cloud-platform-environments](https://github.com/ministryofjustice/cloud-platform-environments/) repository, create a file called `ecr.tf`, and copy the contents of [main.tf](main.tf) into it.
 
-If you do not have a `main.tf` file already, you can use the one provided here, with any necessary changes. If you already have a `main.tf` file in your `resources` directory, you can ignore this one.
-
-Copy the `ecr.tf` file to your `resources` directory, and make any required changes.
-
-Commit your changes to a branch and raise a pull request. Once approved, you can merge and the changes will be applied. Shortly after, you should be able to access the `Secret` on kubernetes and acccess the resources. The generated key allows access to all the Docker repositories tagged with the team's name. You might want to refer to the [documentation on Secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
-
-## From your laptop
-
-Read the AWS key/secret out of your namespace with
-
-```
-kubectl --context=example-team-context --namespace example-app-ns get secret example-team-ecr-credentials-output -o json | jq -r '.data | .[] |= @base64d'
-
-```
-
-With the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env vars from the output above exported, the usual ECR command apply, restricted by IAM policy to the namespace matching your Github team's slug:
-
-```
-aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin <accountid>.dkr.ecr.eu-west-2.amazonaws.com
-
-aws ecr describe-repositories
-
-docker tag <localimage> <accountid>.dkr.ecr.eu-west-1.amazonaws.com/example-team/example-repo:nginx
-
-docker push <accountid>.dkr.ecr.eu-west-1.amazonaws.com/example-team/example-repo:nginx
-
-aws ecr batch-delete-image --repository-name example-team/example-repo --image-ids imageTag=nginx
-
-```
+Change the placeholder values to what is appropriate based on the inline comments, and refer to the top-level [README](../README.md) in this repository for other variables that you can use to customise your resource.
