@@ -15,7 +15,7 @@ module "ecr" {
   # REQUIRED: OIDC providers to configure, either "github", "circleci", or both
   oidc_providers = ["github"]
 
-  # REQUIRED: GitHub repositories that push to this container repository
+  # REQUIRED: MoJ GitHub repositories that push to this container repository
   github_repositories = ["example-repository"]
 
   # OPTIONAL: GitHub environments, to create variables as actions variables in your environments

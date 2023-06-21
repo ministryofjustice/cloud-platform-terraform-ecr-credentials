@@ -88,7 +88,7 @@ No modules.
 | <a name="input_github_actions_secret_ecr_secret_key"></a> [github\_actions\_secret\_ecr\_secret\_key](#input\_github\_actions\_secret\_ecr\_secret\_key) | The name of the github actions secret containing the ECR AWS secret key | `string` | `"ECR_AWS_SECRET_ACCESS_KEY"` | no |
 | <a name="input_github_actions_secret_ecr_url"></a> [github\_actions\_secret\_ecr\_url](#input\_github\_actions\_secret\_ecr\_url) | The name of the github actions secret containing the ECR URL | `string` | `"ECR_URL"` | no |
 | <a name="input_github_environments"></a> [github\_environments](#input\_github\_environments) | GitHub environment in which to create github actions secrets | `list(string)` | `[]` | no |
-| <a name="input_github_repositories"></a> [github\_repositories](#input\_github\_repositories) | GitHub repositories in which to create github actions secrets | `list(string)` | `[]` | no |
+| <a name="input_github_repositories"></a> [github\_repositories](#input\_github\_repositories) | MoJ GitHub repositories in which to create github actions secrets | `list(string)` | `[]` | no |
 | <a name="input_lifecycle_policy"></a> [lifecycle\_policy](#input\_lifecycle\_policy) | A lifecycle policy consists of one or more rules that determine which images in a repository should be expired. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace name | `string` | `null` | no |
 | <a name="input_oidc_providers"></a> [oidc\_providers](#input\_oidc\_providers) | OIDC providers for this ECR repository, valid values are "github" or "circleci" | `list(string)` | `[]` | no |

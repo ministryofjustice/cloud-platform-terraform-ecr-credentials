@@ -21,7 +21,7 @@ variable "scan_on_push" {
 }
 
 variable "github_repositories" {
-  description = "GitHub repositories in which to create github actions secrets"
+  description = "MoJ GitHub repositories in which to create github actions secrets"
   default     = []
   type        = list(string)
 }
