@@ -77,3 +77,9 @@ variable "github_actions_prefix" {
   type        = string
   default     = ""
 }
+
+variable "ready_for_deletion" {
+  description = "Set this to true if you intend to delete your ECR resource or namespace. NOTE: PR owner has responsibility to ensure that no other environments are sharing this ECR."
+  type        = bool
+  default     = false
+}
