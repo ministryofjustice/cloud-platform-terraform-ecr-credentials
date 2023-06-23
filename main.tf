@@ -25,8 +25,8 @@ resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
   image_scanning_configuration {
     scan_on_push = var.scan_on_push
-    force_delete = var.ready_for_deletion
   }
+  force_delete = var.ready_for_deletion
 }
 
 # ECR lifecycle policy
