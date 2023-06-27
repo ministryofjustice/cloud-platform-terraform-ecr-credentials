@@ -92,6 +92,7 @@ No modules.
 | <a name="input_lifecycle_policy"></a> [lifecycle\_policy](#input\_lifecycle\_policy) | A lifecycle policy consists of one or more rules that determine which images in a repository should be expired. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace name | `string` | `null` | no |
 | <a name="input_oidc_providers"></a> [oidc\_providers](#input\_oidc\_providers) | OIDC providers for this ECR repository, valid values are "github" or "circleci" | `list(string)` | `[]` | no |
+| <a name="input_ready_for_deletion"></a> [ready\_for\_deletion](#input\_ready\_for\_deletion) | Set this to true if you intend to delete your ECR resource or namespace. NOTE: PR owner has responsibility to ensure that no other environments are sharing this ECR. | `bool` | `false` | no |
 | <a name="input_repo_name"></a> [repo\_name](#input\_repo\_name) | Name of the repository to be created | `string` | n/a | yes |
 | <a name="input_scan_on_push"></a> [scan\_on\_push](#input\_scan\_on\_push) | Whether images are scanned after being pushed to the repository (true) or not (false) | `bool` | `true` | no |
 | <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Name of the team creating the credentials | `string` | n/a | yes |
