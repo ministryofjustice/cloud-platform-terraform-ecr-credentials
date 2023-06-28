@@ -77,3 +77,9 @@ variable "github_actions_prefix" {
   type        = string
   default     = ""
 }
+
+variable "deletion_protection" {
+  description = "(Optional) Whether the ECR should have deletion protection enabled for non-empty registry. Set this to false if you intend to delete your ECR resource or namespace. NOTE: PR owner has responsibility to ensure that no other environments are sharing this ECR. Defaults to true."
+  type        = bool
+  default     = true
+}
