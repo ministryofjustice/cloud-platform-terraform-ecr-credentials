@@ -74,6 +74,6 @@ module "ecr" {
   # IMPORTANT: It is the PR owners responsibility to ensure that no other environments are sharing this ECR registry.
   # This flag will allow a non-empty ECR to be deleted.
   # Defaults to true
-  
+
   # deletion_protection = false
 }
