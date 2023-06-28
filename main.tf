@@ -26,6 +26,7 @@ resource "aws_ecr_repository" "repo" {
   image_scanning_configuration {
     scan_on_push = var.scan_on_push
   }
+  force_delete = var.deletion_protection ? false : true
 }
 
 # ECR lifecycle policy
