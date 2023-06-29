@@ -63,6 +63,12 @@ variable "lifecycle_policy" {
   default     = null
 }
 
+variable "canned_lifecycle_policy" {
+  description = "A canned lifecycle policy to remove tagged or untagged images"
+  type        = map(any)
+  default     = null
+}
+
 ########
 # OIDC #
 ########

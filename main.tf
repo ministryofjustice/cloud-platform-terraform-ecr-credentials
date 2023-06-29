@@ -36,6 +36,51 @@ resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {
   policy     = var.lifecycle_policy
 }
 
+# Canned lifecycle policies
+locals {
+  canned_lifecycle_policies = {
+    days = {
+      rules = [
+        {
+          rulePriority = 1
+          description  = "Expire images older than ${try(var.canned_lifecycle_policy.count, 0)} day(s)"
+          selection = {
+            tagStatus   = "any"
+            countType   = "sinceImagePushed"
+            countUnit   = "days"
+            countNumber = try(var.canned_lifecycle_policy.count, null)
+          }
+          action = {
+            type = "expire"
+          }
+        }
+      ]
+    }
+    images = {
+      rules = [
+        {
+          rulePriority = 1
+          description  = "Retain ${try(var.canned_lifecycle_policy.count, 0)} newest images, expire all others"
+          selection = {
+            tagStatus   = "any"
+            countType   = "imageCountMoreThan"
+            countNumber = try(var.canned_lifecycle_policy.count, null)
+          }
+          action = {
+            type = "expire"
+          }
+        }
+      ]
+    }
+  }
+}
+
+resource "aws_ecr_lifecycle_policy" "canned" {
+  count      = (var.canned_lifecycle_policy != null) && (var.lifecycle_policy == null) ? 1 : 0
+  repository = aws_ecr_repository.repo.name
+  policy     = (var.canned_lifecycle_policy != null) ? jsonencode(local.canned_lifecycle_policies[var.canned_lifecycle_policy.type]) : null
+}
+
 # Legacy access (IAM access keys)
 resource "random_id" "user" {
   byte_length = 8
