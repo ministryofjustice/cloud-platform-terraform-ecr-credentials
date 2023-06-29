@@ -165,6 +165,59 @@ resource "github_actions_environment_secret" "ecr_secret_key" {
 }
 
 ####################
+# IRSA integration #
+####################
+
+# Short-lived credentials (IRSA)
+# Note: This has a separate policy to OIDC as this should only be used for
+# inspecting images from a service pod rather than pushing an image
+data "aws_iam_policy_document" "irsa" {
+  version = "2012-10-17"
+
+  statement {
+    sid       = "AllowLogin"
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowReadOnly"
+    effect = "Allow"
+    actions = [
+      # General
+      "ecr:ListTagsForResource",
+
+      # Repositories
+      "ecr:DescribeRepositories",
+      "ecr:GetRepositoryPolicy",
+
+      # Lifecycle policies
+      "ecr:GetLifecyclePolicy",
+      "ecr:GetLifecyclePolicyPreview",
+      "ecr:StartLifecyclePolicyPreview",
+
+      # Images
+      "ecr:ListImages",
+      "ecr:DescribeImages",
+      "ecr:BatchGetImage",
+      "ecr:DescribeImageScanFindings",
+
+      # Layers
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+    ]
+    resources = [aws_ecr_repository.repo.arn]
+  }
+}
+
+resource "aws_iam_policy" "irsa" {
+  name   = "${local.oidc_identifier}-irsa"
+  path   = "/cloud-platform/ecr/"
+  policy = data.aws_iam_policy_document.irsa.json
+}
+
+####################
 # OIDC integration #
 ####################
 data "aws_secretsmanager_secret" "circleci" {
