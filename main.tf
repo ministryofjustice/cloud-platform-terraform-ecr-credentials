@@ -24,7 +24,7 @@ data "aws_region" "current" {}
 resource "aws_ecr_repository" "repo" {
   name = "${var.team_name}/${var.repo_name}"
   image_scanning_configuration {
-    scan_on_push = var.scan_on_push
+    scan_on_push = true
   }
   force_delete = var.deletion_protection ? false : true
 }
