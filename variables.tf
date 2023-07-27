@@ -3,12 +3,6 @@ variable "repo_name" {
   type        = string
 }
 
-variable "scan_on_push" {
-  default     = true
-  description = "Whether images are scanned after being pushed to the repository (true) or not (false)"
-  type        = bool
-}
-
 variable "github_repositories" {
   description = "GitHub repositories in which to create github actions secrets"
   default     = []
