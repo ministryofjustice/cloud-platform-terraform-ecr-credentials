@@ -3,17 +3,6 @@ variable "repo_name" {
   type        = string
 }
 
-variable "team_name" {
-  description = "Name of the team creating the credentials"
-  type        = string
-}
-
-variable "namespace" {
-  description = "Namespace name"
-  type        = string
-  default     = null
-}
-
 variable "github_repositories" {
   description = "GitHub repositories in which to create github actions secrets"
   default     = []
@@ -58,4 +47,42 @@ variable "deletion_protection" {
   description = "(Optional) Whether the ECR should have deletion protection enabled for non-empty registry. Set this to false if you intend to delete your ECR resource or namespace. NOTE: PR owner has responsibility to ensure that no other environments are sharing this ECR. Defaults to true."
   type        = bool
   default     = true
+}
+
+########
+# Tags #
+########
+variable "business_unit" {
+  description = "Area of the MOJ responsible for the service"
+  type        = string
+}
+
+variable "application" {
+  description = "Application name"
+  type        = string
+}
+
+variable "is_production" {
+  description = "Whether this is used for production or not"
+  type        = string
+}
+
+variable "team_name" {
+  description = "Team name"
+  type        = string
+}
+
+variable "namespace" {
+  description = "Namespace name"
+  type        = string
+}
+
+variable "environment_name" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "infrastructure_support" {
+  description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
+  type        = string
 }

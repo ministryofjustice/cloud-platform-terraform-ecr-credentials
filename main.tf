@@ -1,4 +1,5 @@
 locals {
+  # GitHub configuration
   github_repositories = toset([
     for repository in var.github_repositories : {
       repository = repository
@@ -15,6 +16,20 @@ locals {
       environment = pair[1].environment
     }
   ]
+
+  # Tags
+  default_tags = {
+    # Mandatory
+    business-unit = var.business_unit
+    application   = var.application
+    is-production = var.is_production
+    owner         = var.team_name
+    namespace     = var.namespace # for billing and identification purposes
+
+    # Optional
+    environment-name       = var.environment_name
+    infrastructure-support = var.infrastructure_support
+  }
 }
 
 data "aws_caller_identity" "current" {}
@@ -27,6 +42,8 @@ resource "aws_ecr_repository" "repo" {
     scan_on_push = true
   }
   force_delete = var.deletion_protection ? false : true
+
+  tags = local.default_tags
 }
 
 # ECR lifecycle policy
@@ -132,6 +149,7 @@ resource "aws_iam_policy" "irsa" {
   name   = "${local.oidc_identifier}-irsa"
   path   = "/cloud-platform/ecr/"
   policy = data.aws_iam_policy_document.irsa.json
+  tags   = local.default_tags
 }
 
 ####################
@@ -217,6 +235,7 @@ resource "aws_iam_policy" "ecr" {
 
   name   = local.oidc_identifier
   policy = data.aws_iam_policy_document.base.json
+  tags   = local.default_tags
 }
 
 # GitHub: OIDC provider
@@ -258,6 +277,8 @@ resource "aws_iam_role" "github" {
 
   name               = "${local.oidc_identifier}-github"
   assume_role_policy = data.aws_iam_policy_document.github.json
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_role_policy_attachment" "github_ecr" {
@@ -361,6 +382,8 @@ resource "aws_iam_role" "circleci" {
 
   name               = "${local.oidc_identifier}-circleci"
   assume_role_policy = data.aws_iam_policy_document.circleci.json
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_role_policy_attachment" "circleci_ecr" {
