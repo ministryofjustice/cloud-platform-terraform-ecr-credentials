@@ -15,30 +15,6 @@ variable "github_environments" {
   default     = []
 }
 
-variable "github_actions_secret_ecr_name" {
-  description = "The name of the github actions secret containing the ECR name"
-  default     = "ECR_NAME"
-  type        = string
-}
-
-variable "github_actions_secret_ecr_url" {
-  description = "The name of the github actions secret containing the ECR URL"
-  default     = "ECR_URL"
-  type        = string
-}
-
-variable "github_actions_secret_ecr_access_key" {
-  description = "The name of the github actions secret containing the ECR AWS access key"
-  default     = "ECR_AWS_ACCESS_KEY_ID"
-  type        = string
-}
-
-variable "github_actions_secret_ecr_secret_key" {
-  description = "The name of the github actions secret containing the ECR AWS secret key"
-  default     = "ECR_AWS_SECRET_ACCESS_KEY"
-  type        = string
-}
-
 # Lifecycle policy
 variable "lifecycle_policy" {
   description = "A lifecycle policy consists of one or more rules that determine which images in a repository should be expired."
