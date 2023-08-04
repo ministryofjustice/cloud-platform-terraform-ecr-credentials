@@ -9,6 +9,7 @@ module "ecr" {
 
   # REQUIRED: Repository configuration
   repo_name = var.namespace
+  team_name = var.team_name
 
   # REQUIRED: OIDC providers to configure, either "github", "circleci", or both
   oidc_providers = ["github"]
