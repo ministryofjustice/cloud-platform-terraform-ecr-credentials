@@ -202,6 +202,7 @@ resource "random_id" "oidc" {
 }
 
 # Base ECR policy for pushing and pulling images, can be used across all OIDC providers
+# Also allows listing existing images and deleting them
 # See: https://github.com/aws-actions/amazon-ecr-login#permissions
 data "aws_iam_policy_document" "base" {
   version = "2012-10-17"
@@ -214,14 +215,17 @@ data "aws_iam_policy_document" "base" {
   }
 
   statement {
-    sid    = "AllowPushPull"
+    sid    = "AllowPushPullListDelete"
     effect = "Allow"
     actions = [
       "ecr:BatchGetImage",
       "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchDeleteImage",
       "ecr:CompleteLayerUpload",
+      "ecr:DescribeImages",
       "ecr:GetDownloadUrlForLayer",
       "ecr:InitiateLayerUpload",
+      "ecr:ListImages",
       "ecr:PutImage",
       "ecr:UploadLayerPart"
     ]
