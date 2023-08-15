@@ -1,3 +1,6 @@
+#################
+# Configuration #
+#################
 variable "repo_name" {
   description = "Name of the repository to be created"
   type        = string
