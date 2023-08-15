@@ -1,8 +1,8 @@
 # cloud-platform-terraform-ecr-credentials
 
-[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-ecr-credentials/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/releases)
+[![Releases](https://img.shields.io/github/v/release/ministryofjustice/cloud-platform-terraform-ecr-credentials.svg)](https://github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials/releases)
 
-This Terraform module will create an [Amazon ECR private repository](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html) for use on the Cloud Platform.
+This Terraform module will create an [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/) private repository for use on the Cloud Platform.
 
 If you're using GitHub as your OIDC provider, this module will automatically create the required variables for authentication in your GitHub repository.
 
@@ -16,16 +16,21 @@ This module only supports authentication with GitHub Actions and CircleCI.
 module "container_repository" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=version" # use the latest release
 
-  # Configuration
-  team_name = var.team_name # also used to name the repository
+  # Repository configuration
   repo_name = var.namespace
-  namespace = var.namespace
 
-  # OIDC configuration
-  oidc_providers = ["github"]
-
-  # GitHub configuration
+  # OpenID Connect configuration
+  oidc_providers      = ["github"]
   github_repositories = ["example-repository"]
+
+  # Tags
+  business_unit          = var.business_unit
+  application            = var.application
+  is_production          = var.is_production
+  team_name              = var.team_name # also used for naming the container repository
+  namespace              = var.namespace # also used for creating a Kubernetes ConfigMap
+  environment_name       = var.environment
+  infrastructure_support = var.infrastructure_support
 }
 ```
 
@@ -125,4 +130,4 @@ You should use your namespace variables to populate these. See the [Usage](#usag
 ## Reading Material
 
 - [Cloud Platform user guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
-- [Amazon ECR private repositories guide](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html)
+- [Amazon Elastic Container Registry private repository user guide](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Repositories.html)
