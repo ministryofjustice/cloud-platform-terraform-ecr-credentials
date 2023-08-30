@@ -116,7 +116,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | n/a |
+| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM policy ARN for access to the container repository |
 | <a name="output_repo_arn"></a> [repo\_arn](#output\_repo\_arn) | ECR repository ARN |
 | <a name="output_repo_url"></a> [repo\_url](#output\_repo\_url) | ECR repository URL |
 <!-- END_TF_DOCS -->
