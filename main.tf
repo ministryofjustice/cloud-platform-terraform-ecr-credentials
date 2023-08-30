@@ -109,14 +109,14 @@ data "aws_iam_policy_document" "irsa" {
   version = "2012-10-17"
 
   statement {
-    sid       = "AllowLogin"
+    sid       = "AllowLoginFor${random_id.oidc.hex}"
     effect    = "Allow"
     actions   = ["ecr:GetAuthorizationToken"]
     resources = ["*"]
   }
 
   statement {
-    sid    = "AllowReadOnly"
+    sid    = "AllowReadOnlyFor${random_id.oidc.hex}"
     effect = "Allow"
     actions = [
       # General
