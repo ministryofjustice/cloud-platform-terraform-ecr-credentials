@@ -10,6 +10,12 @@ variable "github_repositories" {
   description = "GitHub repositories in which to create github actions secrets"
   default     = []
   type        = list(string)
+
+  validation {
+    ## Ensure that the GitHub repository names cannot contain a url
+    condition     = alltrue([for repo in var.github_repositories : can(regex("^[^/]+$", repo))])
+    error_message = "GitHub repository name cannot contain a url, please only enter the repository name"
+  }
 }
 
 variable "github_environments" {
@@ -83,6 +89,12 @@ variable "namespace" {
 variable "environment_name" {
   description = "Environment name"
   type        = string
+
+  validation {
+    ## Ensure that the environment name isnt empty
+    condition     = length(var.environment_name) > 0
+    error_message = "environment_name cannot be empty"
+  }
 }
 
 variable "infrastructure_support" {
