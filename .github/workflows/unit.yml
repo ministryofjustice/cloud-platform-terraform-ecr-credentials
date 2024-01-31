@@ -7,18 +7,33 @@ jobs:
     name: Run Terratest Success Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21.6
       - name: Run Terratest Unit Tests
         run: |
-          cd test
+          go mod download
           go test -v -run TestECRValidateSuccess -timeout 30m ./...
+        working-directory: test
+
   ecr-failure-validation:
     name: Run Terratest Failure Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21.6
       - name: Run Terratest Unit Tests
         run: |
-          cd test
+          go mod download
           go test -v -run TestECRValidateFailure -timeout 30m ./...
+        working-directory: test
 

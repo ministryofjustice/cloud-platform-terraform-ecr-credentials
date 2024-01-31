@@ -1,5 +1,5 @@
 module "ecr_pass" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-ecr-credentials?ref=tf-validation"
+  source = "../../.."
 
   # Repository configuration
   repo_name = var.namespace
