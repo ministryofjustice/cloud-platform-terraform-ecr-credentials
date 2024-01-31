@@ -3,16 +3,22 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 jobs:
-  go-tests:
-    name: Run Terratest Unit Tests
+  ecr-success-validation:
+    name: Run Terratest Success Unit Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.2.5
-          terraform_wrapper: false
-      - run: |
-          terraform init
-          terraform validate
-        working-directory: examples/
+      - name: Run Terratest Unit Tests
+        run: |
+          cd test
+          go test -v -run TestECRValidateSuccess -timeout 30m ./...
+  ecr-failure-validation:
+    name: Run Terratest Failure Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Terratest Unit Tests
+        run: |
+          cd test
+          go test -v -run TestECRValidateFailure -timeout 30m ./...
+
