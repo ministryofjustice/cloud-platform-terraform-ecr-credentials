@@ -367,9 +367,9 @@ data "aws_iam_policy_document" "circleci" {
     }
 
     condition {
-      test     = (length(local.github_repos) == 1) ? "StringLike" : "ForAnyValue:StringLike"
+      test     = (length(toset(var.github_repositories)) == 1) ? "StringLike" : "ForAnyValue:StringLike"
       variable = "${local.oidc_providers.circleci}:sub"
-      values   = formatlist("org/${local.circleci_organisation_id}/project/*/user/*/vcs-origin/github.com/ministryofjustice/%s/vcs-ref/refs/heads/*", local.github_repos)
+      values   = formatlist("org/${local.circleci_organisation_id}/project/*/user/*/vcs-origin/github.com/ministryofjustice/%s/vcs-ref/refs/heads/*", toset(var.github_repositories))
     }
 
     condition {
