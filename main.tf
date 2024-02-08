@@ -380,6 +380,10 @@ data "aws_iam_policy_document" "circleci" {
   }
 }
 
+output "ci_policy" {
+  value = data.aws_iam_policy_document.circleci.json
+}
+
 # IAM role and policy attachment for ECR
 resource "aws_iam_role" "circleci" {
   count = local.enable_circleci ? 1 : 0
