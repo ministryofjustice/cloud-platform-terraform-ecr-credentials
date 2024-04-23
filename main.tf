@@ -294,7 +294,7 @@ resource "aws_iam_role_policy_attachment" "github_ecr" {
 
 # Actions
 resource "github_actions_secret" "ecr_role_to_assume" {
-  for_each = local.enable_github ? local.github_repos : []
+  for_each = (length(var.github_environments) == 0 && local.enable_github) ? local.github_repos : []
 
   repository      = each.value
   secret_name     = local.github_variable_names["ECR_ROLE_TO_ASSUME"]
@@ -302,7 +302,7 @@ resource "github_actions_secret" "ecr_role_to_assume" {
 }
 
 resource "github_actions_variable" "ecr_region" {
-  for_each = local.enable_github ? local.github_repos : []
+  for_each = (length(var.github_environments) == 0 && local.enable_github) ? local.github_repos : []
 
   repository    = each.value
   variable_name = local.github_variable_names["ECR_REGION"]
@@ -310,7 +310,7 @@ resource "github_actions_variable" "ecr_region" {
 }
 
 resource "github_actions_variable" "ecr_repository" {
-  for_each = local.enable_github ? local.github_repos : []
+  for_each = (length(var.github_environments) == 0 && local.enable_github) ? local.github_repos : []
 
   repository    = each.value
   variable_name = local.github_variable_names["ECR_REPOSITORY"]
