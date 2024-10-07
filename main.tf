@@ -1,4 +1,9 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 locals {
+  ecr_registry_url = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
+
   # GitHub configuration
   github_repositories = toset([
     for repository in var.github_repositories : {
@@ -31,9 +36,6 @@ locals {
     infrastructure-support = var.infrastructure_support
   }
 }
-
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
 
 # ECR repository
 resource "aws_ecr_repository" "repo" {
@@ -307,6 +309,14 @@ resource "github_actions_variable" "ecr_region" {
   repository    = each.value
   variable_name = local.github_variable_names["ECR_REGION"]
   value         = data.aws_region.current.name
+}
+
+resource "github_actions_secret" "ecr_registry_url" {
+  for_each = (length(var.github_environments) == 0 && local.enable_github) ? local.github_repos : []
+
+  repository      = each.value
+  secret_name     = "ECR_REGISTRY_URL"
+  plaintext_value = local.ecr_registry_url
 }
 
 resource "github_actions_variable" "ecr_repository" {
