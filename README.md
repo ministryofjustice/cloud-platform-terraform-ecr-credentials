@@ -4,7 +4,7 @@
 
 This Terraform module will create an [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/) private repository for use on the Cloud Platform.
 
-If you're using GitHub as your OIDC provider, this module will automatically create the required variables for authentication in your GitHub repository.
+If you're using GitHub as your OIDC provider, this module will automatically create the required variables for authentication in your GitHub repository. By default these will be created as [repository secrets and variables](https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-a-repository). Alternatively, you can configure the module to instead create the ECR secrets and variables in your own defined [GitHub Environments](https://docs.github.com/en/actions/learn-github-actions/variables#creating-configuration-variables-for-an-environment) with the `github_environments` field. This pattern is useful if you wish to define separate ECR repositories for different Cloud Platform environments within the same GitHub repository.
 
 If you're using CircleCI as your OIDC provider, this module will create a Kubernetes ConfigMap in your namespace with your authentication variables to use as environment variables in CircleCI.
 
@@ -76,6 +76,7 @@ No modules.
 | [github_actions_environment_secret.ecr_role_to_assume](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
 | [github_actions_environment_variable.ecr_region](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_variable) | resource |
 | [github_actions_environment_variable.ecr_repository](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_variable) | resource |
+| [github_actions_secret.ecr_registry_url](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ecr_role_to_assume](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_variable.ecr_region](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ecr_repository](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
