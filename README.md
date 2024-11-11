@@ -76,6 +76,7 @@ No modules.
 | [github_actions_environment_secret.ecr_role_to_assume](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_secret) | resource |
 | [github_actions_environment_variable.ecr_region](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_variable) | resource |
 | [github_actions_environment_variable.ecr_repository](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_environment_variable) | resource |
+| [github_actions_secret.ecr_registry_url](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ecr_role_to_assume](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_variable.ecr_region](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ecr_repository](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
