@@ -6,10 +6,10 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         ref: ${{ github.event.pull_request.head.ref }}
-    - uses: terraform-docs/gh-actions@v1.2.0
+    - uses: terraform-docs/gh-actions@e47bfa196e79fa50987ef391be236d9d97b0c786 # v1.2.0
       with:
         working-dir: .
         output-file: README.md
