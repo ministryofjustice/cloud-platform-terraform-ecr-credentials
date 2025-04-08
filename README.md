@@ -38,6 +38,12 @@ module "container_repository" {
 
 See the [examples/](examples/) folder for more information.
 
+## Team name caveat
+
+This module utilises your environemnt `team_name` variable in the naming of your ECR repository, in the format `<var.eam_name>-<var.repo_name>`. This historically introduced an issue whereby a team name change would result in Terraform forcefully replacing the ECR repository, To get around this issue, a [lifecycle](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) `ignore_changes` block has been introduced, so that team name changes can be made without causing this issue.
+
+However, its important to note that if you do change the team name in your environment variables, it will not be reflected in the ECR repository name. If you want to update the name, you will need to look at deleting and recreating your ECR respository. 
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

@@ -46,6 +46,10 @@ resource "aws_ecr_repository" "repo" {
   force_delete = var.deletion_protection ? false : true
 
   tags = local.default_tags
+
+  lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 # ECR lifecycle policy
