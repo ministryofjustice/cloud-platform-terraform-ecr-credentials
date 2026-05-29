@@ -44,6 +44,13 @@ variable "oidc_providers" {
   description = "OIDC providers for this ECR repository, valid values are \"github\" or \"circleci\""
   type        = list(string)
   default     = []
+
+  validation {
+    condition = alltrue([
+      for v in var.oidc_providers : contains(["github", "circleci"], v)
+    ])
+    error_message = "oidc_providers can only contain 'github' and/or 'circleci'."
+  }
 }
 
 variable "github_actions_prefix" {
