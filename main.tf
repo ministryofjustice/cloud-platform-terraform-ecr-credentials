@@ -113,7 +113,7 @@ resource "aws_ecr_lifecycle_policy" "canned" {
 # inspecting images from a service pod rather than pushing an image
 
 data "aws_iam_policy_document" "irsa" {
-  count = var.enable_irsa ? 1 : 0
+  count   = var.enable_irsa ? 1 : 0
   version = "2012-10-17"
 
   statement {
@@ -164,12 +164,18 @@ resource "aws_iam_policy" "irsa" {
 ####################
 # OIDC integration #
 ####################
+locals {
+  enable_circleci = contains(var.oidc_providers, "circleci")
+}
+
 data "aws_secretsmanager_secret" "circleci" {
-  name = "cloud-platform-circleci"
+  count = local.enable_circleci ? 1 : 0
+  name  = "cloud-platform-circleci"
 }
 
 data "aws_secretsmanager_secret_version" "circleci" {
-  secret_id = data.aws_secretsmanager_secret.circleci.id
+  count     = local.enable_circleci ? 1 : 0
+  secret_id = data.aws_secretsmanager_secret.circleci[0].id
 }
 
 locals {
@@ -177,10 +183,14 @@ locals {
   oidc_identifier = "cloud-platform-ecr-${random_id.oidc.hex}"
 
   # Providers
-  oidc_providers = {
-    github   = "token.actions.githubusercontent.com"
-    circleci = "oidc.circleci.com/org/${jsondecode(data.aws_secretsmanager_secret_version.circleci.secret_string)["organisation_id"]}"
-  }
+  oidc_providers = merge(
+    {
+      github = "token.actions.githubusercontent.com"
+    },
+    local.enable_circleci ? {
+      circleci = "oidc.circleci.com/org/${jsondecode(data.aws_secretsmanager_secret_version.circleci[0].secret_string)["organisation_id"]}"
+    } : {}
+  )
 
   # GitHub
   enable_github = contains(var.oidc_providers, "github")
@@ -201,8 +211,7 @@ locals {
   }
 
   # CircleCI
-  enable_circleci          = contains(var.oidc_providers, "circleci")
-  circleci_organisation_id = jsondecode(data.aws_secretsmanager_secret_version.circleci.secret_string)["organisation_id"]
+  circleci_organisation_id = local.enable_circleci ? jsondecode(data.aws_secretsmanager_secret_version.circleci[0].secret_string)["organisation_id"] : null
 }
 
 # Random ID for identifiers
@@ -253,12 +262,14 @@ resource "aws_iam_policy" "ecr" {
 
 # GitHub: OIDC provider
 data "aws_iam_openid_connect_provider" "github" {
-  url = "https://${local.oidc_providers.github}"
+  count = local.enable_github ? 1 : 0
+  url   = "https://${local.oidc_providers.github}"
 }
 
 # GitHub: Assume role policy
 # See: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#adding-the-identity-provider-to-aws
 data "aws_iam_policy_document" "github" {
+  count   = local.enable_github ? 1 : 0
   version = "2012-10-17"
 
   statement {
@@ -267,7 +278,7 @@ data "aws_iam_policy_document" "github" {
 
     principals {
       type        = "Federated"
-      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
+      identifiers = [data.aws_iam_openid_connect_provider.github[0].arn]
     }
 
     condition {
@@ -289,7 +300,7 @@ resource "aws_iam_role" "github" {
   count = local.enable_github ? 1 : 0
 
   name               = "${local.oidc_identifier}-github"
-  assume_role_policy = data.aws_iam_policy_document.github.json
+  assume_role_policy = data.aws_iam_policy_document.github[0].json
 
   tags = local.default_tags
 }
@@ -364,7 +375,8 @@ resource "github_actions_environment_variable" "ecr_repository" {
 
 # CircleCI: OIDC provider
 data "aws_iam_openid_connect_provider" "circleci" {
-  url = "https://${local.oidc_providers.circleci}"
+  count = local.enable_circleci ? 1 : 0
+  url   = "https://${local.oidc_providers.circleci}"
 }
 
 # CircleCI: Assume role policy
@@ -372,6 +384,7 @@ data "aws_iam_openid_connect_provider" "circleci" {
 # The :sub value requires a user to use version 2 (not version 1) of CircleCI's OIDC token,
 # as that is the only way to restrict the push by the VCS (e.g. GitHub) origin.
 data "aws_iam_policy_document" "circleci" {
+  count   = local.enable_circleci ? 1 : 0
   version = "2012-10-17"
 
   statement {
@@ -380,7 +393,7 @@ data "aws_iam_policy_document" "circleci" {
 
     principals {
       type        = "Federated"
-      identifiers = [data.aws_iam_openid_connect_provider.circleci.arn]
+      identifiers = [data.aws_iam_openid_connect_provider.circleci[0].arn]
     }
 
     condition {
@@ -402,7 +415,7 @@ resource "aws_iam_role" "circleci" {
   count = local.enable_circleci ? 1 : 0
 
   name               = "${local.oidc_identifier}-circleci"
-  assume_role_policy = data.aws_iam_policy_document.circleci.json
+  assume_role_policy = data.aws_iam_policy_document.circleci[0].json
 
   tags = local.default_tags
 }
