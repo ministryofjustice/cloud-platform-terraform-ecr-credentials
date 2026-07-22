@@ -282,9 +282,12 @@ data "aws_iam_policy_document" "github" {
     }
 
     condition {
-      test     = (length(local.github_repos) == 1) ? "StringLike" : "ForAnyValue:StringLike"
+      test     = "ForAnyValue:StringLike"
       variable = "${local.oidc_providers.github}:sub"
-      values   = formatlist("repo:ministryofjustice/%s:*", local.github_repos)
+      values = concat(
+        formatlist("repo:ministryofjustice/%s:*", local.github_repos),
+        formatlist("repo:ministryofjustice@*/%s@*:*", local.github_repos),
+      )
     }
 
     condition {
