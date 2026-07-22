@@ -60,6 +60,14 @@ module "ecr" {
 
 This change has been introduced to support Cloud Platform's effort in reducing the count of unused IAM policies 
 
+## GitHub OIDC subject claims
+
+GitHub changed the format of the OIDC token subject (`sub`) claim. Repositories created after 15 July 2026, along with repositories renamed or transferred after that date, now use an immutable subject that includes the numeric owner ID and repository ID. The subject changes from `repo:ministryofjustice/<repo>:...` to `repo:ministryofjustice@<owner_id>/<repo>@<repo_id>:...`.
+
+The IAM role trust policy created by this module matches both formats, so GitHub Actions authentication keeps working whether your repository uses the older name-based subject or the newer immutable one. You do not need to change anything in your module call.
+
+For background, see [GitHub's OpenID Connect reference](https://docs.github.com/en/actions/reference/security/oidc).
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
