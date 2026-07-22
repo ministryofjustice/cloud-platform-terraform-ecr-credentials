@@ -66,7 +66,7 @@ GitHub changed the format of the OIDC token subject (`sub`) claim. Repositories 
 
 The IAM role trust policy created by this module matches both formats, so GitHub Actions authentication keeps working whether your repository uses the older name-based subject or the newer immutable one. You do not need to change anything in your module call.
 
-For background, see [GitHub's OpenID Connect reference](https://docs.github.com/en/actions/reference/security/oidc).
+For background, see [GitHub's OpenID Connect reference](https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims).
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
